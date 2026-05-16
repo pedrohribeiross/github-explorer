@@ -25,7 +25,7 @@ export const SortSelector = ({ value, onChange }: SortSelectorProps) => {
   const selectId = useId()
 
   return (
-    <div>
+    <div className="flex-shrink-0">
       <label htmlFor={selectId} className="form-label">
         Ordenar por
       </label>
