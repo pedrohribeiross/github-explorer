@@ -15,7 +15,7 @@ export const RepositoryListItem = ({ repository }: RepositoryListItemProps) => {
         {repository.language && <span className="badge text-bg-light">{repository.language}</span>}
       </div>
       <span className="text-nowrap" aria-label={`${repository.stargazersCount} estrelas`}>
-        ★ {repository.stargazersCount}
+        <span aria-hidden="true">★</span> {repository.stargazersCount}
       </span>
     </div>
   )

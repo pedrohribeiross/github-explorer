@@ -10,7 +10,7 @@ export const RepositoryDetailPage = () => {
   return (
     <section aria-labelledby="repository-detail-title" className="d-flex flex-column gap-3">
       <Link to={buildUserProfilePath(username)} className="text-decoration-none">
-        ← Voltar para o perfil
+        <span aria-hidden="true">←</span> Voltar para o perfil
       </Link>
 
       <AsyncSection state={repository} notFoundMessage="Repositório não encontrado">
@@ -25,7 +25,7 @@ export const RepositoryDetailPage = () => {
 
               <div className="d-flex flex-wrap gap-3">
                 <span aria-label={`${loadedRepository.stargazersCount} estrelas`}>
-                  ★ {loadedRepository.stargazersCount}
+                  <span aria-hidden="true">★</span> {loadedRepository.stargazersCount}
                 </span>
                 {loadedRepository.language && (
                   <span className="badge text-bg-light align-self-center">
