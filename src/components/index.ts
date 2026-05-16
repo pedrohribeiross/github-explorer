@@ -1,6 +1,7 @@
 export { LoadingSpinner } from './LoadingSpinner'
 export { ErrorMessage } from './ErrorMessage'
 export { ApiErrorMessage } from './ApiErrorMessage'
+export { AsyncSection } from './AsyncSection'
 export { Layout } from './Layout'
 export { UserCard } from './UserCard'
 export { RepositoryList } from './RepositoryList'
