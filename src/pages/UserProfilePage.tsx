@@ -1,6 +1,13 @@
 import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { ErrorMessage, LoadingSpinner, RepositoryList, SortSelector, UserCard } from '../components'
+import {
+  ApiErrorMessage,
+  ErrorMessage,
+  LoadingSpinner,
+  RepositoryList,
+  SortSelector,
+  UserCard,
+} from '../components'
 import { useSearchContext } from '../context'
 import { useRepositories, useUser } from '../hooks'
 import { sortRepositories } from '../utils'
@@ -28,7 +35,9 @@ export const UserProfilePage = () => {
       </h2>
 
       {user.loading && <LoadingSpinner />}
-      {user.error && <ErrorMessage message="Não foi possível carregar o usuário" />}
+      {user.error && (
+        <ApiErrorMessage error={user.error} notFoundMessage="Usuário não encontrado" />
+      )}
       {user.data && <UserCard user={user.data} />}
 
       <div>
