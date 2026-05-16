@@ -39,7 +39,9 @@ export const UserProfilePage = () => {
 
         {repositories.loading && <LoadingSpinner />}
         {repositories.error && <ErrorMessage message="Não foi possível carregar os repositórios" />}
-        {repositories.data && <RepositoryList repositories={sortedRepositories} />}
+        {repositories.data && (
+          <RepositoryList username={username} repositories={sortedRepositories} />
+        )}
       </div>
     </section>
   )
