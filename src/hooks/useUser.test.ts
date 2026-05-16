@@ -31,6 +31,7 @@ describe('useUser', () => {
     expect(result.current).toEqual({
       data: null,
       loading: true,
+      offline: false,
       error: null,
       retry: expect.any(Function),
     })
@@ -48,6 +49,7 @@ describe('useUser', () => {
     expect(result.current).toEqual({
       data: user,
       loading: false,
+      offline: false,
       error: null,
       retry: expect.any(Function),
     })
@@ -67,6 +69,7 @@ describe('useUser', () => {
     expect(result.current).toEqual({
       data: null,
       loading: false,
+      offline: false,
       error,
       retry: expect.any(Function),
     })
@@ -80,6 +83,7 @@ describe('useUser', () => {
     expect(result.current).toEqual({
       data: null,
       loading: false,
+      offline: false,
       error: null,
       retry: expect.any(Function),
     })
