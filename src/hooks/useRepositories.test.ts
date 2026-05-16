@@ -29,7 +29,12 @@ describe('useRepositories', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: true, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: true,
+      error: null,
+      retry: expect.any(Function),
+    })
   })
 
   it('returns the repositories on success', async () => {
@@ -41,7 +46,12 @@ describe('useRepositories', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({ data: [repository], loading: false, error: null })
+    expect(result.current).toEqual({
+      data: [repository],
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetUserRepositories).toHaveBeenCalledWith('octocat')
   })
 
@@ -54,7 +64,12 @@ describe('useRepositories', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({ data: [], loading: false, error: null })
+    expect(result.current).toEqual({
+      data: [],
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
   })
 
   it('exposes the error when the request fails', async () => {
@@ -67,7 +82,12 @@ describe('useRepositories', () => {
 
     await waitFor(() => expect(result.current.error).toBe(error))
 
-    expect(result.current).toEqual({ data: null, loading: false, error })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error,
+      retry: expect.any(Function),
+    })
   })
 
   it('does not fetch and is not loading when the username is empty', () => {
@@ -75,7 +95,12 @@ describe('useRepositories', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: false, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetUserRepositories).not.toHaveBeenCalled()
   })
 })

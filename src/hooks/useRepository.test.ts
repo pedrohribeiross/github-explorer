@@ -29,7 +29,12 @@ describe('useRepository', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: true, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: true,
+      error: null,
+      retry: expect.any(Function),
+    })
   })
 
   it('returns the repository on success', async () => {
@@ -41,7 +46,12 @@ describe('useRepository', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({ data: repository, loading: false, error: null })
+    expect(result.current).toEqual({
+      data: repository,
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetRepository).toHaveBeenCalledWith('octocat', 'hello-world')
   })
 
@@ -55,7 +65,12 @@ describe('useRepository', () => {
 
     await waitFor(() => expect(result.current.error).toBe(error))
 
-    expect(result.current).toEqual({ data: null, loading: false, error })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error,
+      retry: expect.any(Function),
+    })
   })
 
   it('does not fetch when owner or repo is missing', () => {
@@ -63,7 +78,12 @@ describe('useRepository', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: false, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetRepository).not.toHaveBeenCalled()
   })
 })

@@ -28,7 +28,12 @@ describe('useUser', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: true, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: true,
+      error: null,
+      retry: expect.any(Function),
+    })
   })
 
   it('returns the user on success', async () => {
@@ -40,7 +45,12 @@ describe('useUser', () => {
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({ data: user, loading: false, error: null })
+    expect(result.current).toEqual({
+      data: user,
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetUser).toHaveBeenCalledWith('octocat')
   })
 
@@ -54,7 +64,12 @@ describe('useUser', () => {
 
     await waitFor(() => expect(result.current.error).toBe(error))
 
-    expect(result.current).toEqual({ data: null, loading: false, error })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error,
+      retry: expect.any(Function),
+    })
   })
 
   it('does not fetch and is not loading when the username is empty', () => {
@@ -62,7 +77,12 @@ describe('useUser', () => {
       wrapper: createQueryClientWrapper(),
     })
 
-    expect(result.current).toEqual({ data: null, loading: false, error: null })
+    expect(result.current).toEqual({
+      data: null,
+      loading: false,
+      error: null,
+      retry: expect.any(Function),
+    })
     expect(mockedGetUser).not.toHaveBeenCalled()
   })
 })
