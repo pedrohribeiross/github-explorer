@@ -8,4 +8,7 @@ export const toAsyncState = <TData>(
   data: query.data ?? null,
   loading: enabled && query.isPending,
   error: query.error ?? null,
+  retry: () => {
+    void query.refetch()
+  },
 })
