@@ -1,7 +1,5 @@
 import { Layout } from './components'
 
-function App () {
-  return <Layout />
-}
+const App = () => <Layout />
 
 export default App
