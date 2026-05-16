@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   ApiErrorMessage,
-  ErrorMessage,
   LoadingSpinner,
   RepositoryList,
   SortSelector,
@@ -36,7 +35,11 @@ export const UserProfilePage = () => {
 
       {user.loading && <LoadingSpinner />}
       {user.error && (
-        <ApiErrorMessage error={user.error} notFoundMessage="Usuário não encontrado" />
+        <ApiErrorMessage
+          error={user.error}
+          notFoundMessage="Usuário não encontrado"
+          onRetry={user.retry}
+        />
       )}
       {user.data && <UserCard user={user.data} />}
 
@@ -47,7 +50,13 @@ export const UserProfilePage = () => {
         </div>
 
         {repositories.loading && <LoadingSpinner />}
-        {repositories.error && <ErrorMessage message="Não foi possível carregar os repositórios" />}
+        {repositories.error && (
+          <ApiErrorMessage
+            error={repositories.error}
+            notFoundMessage="Usuário não encontrado"
+            onRetry={repositories.retry}
+          />
+        )}
         {repositories.data && (
           <RepositoryList username={username} repositories={sortedRepositories} />
         )}

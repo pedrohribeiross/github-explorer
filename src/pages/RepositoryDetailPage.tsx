@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ErrorMessage, LoadingSpinner } from '../components'
+import { ApiErrorMessage, LoadingSpinner } from '../components'
 import { useRepository } from '../hooks'
 import { buildUserProfilePath } from '../routes'
 
@@ -14,7 +14,13 @@ export const RepositoryDetailPage = () => {
       </Link>
 
       {repository.loading && <LoadingSpinner />}
-      {repository.error && <ErrorMessage message="Não foi possível carregar o repositório" />}
+      {repository.error && (
+        <ApiErrorMessage
+          error={repository.error}
+          notFoundMessage="Repositório não encontrado"
+          onRetry={repository.retry}
+        />
+      )}
 
       {repository.data && (
         <article className="card">
