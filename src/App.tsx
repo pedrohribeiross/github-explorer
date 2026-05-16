@@ -1,9 +1,14 @@
-function App() {
+import { Link, Outlet } from 'react-router-dom'
+import { ROUTE_PATHS } from './routes'
+
+function App () {
   return (
     <div className="d-flex flex-column min-vh-100">
       <header className="bg-dark text-white py-3">
         <div className="container">
-          <h1 className="h4 mb-0">GitHub Explorer</h1>
+          <Link to={ROUTE_PATHS.search} className="text-white text-decoration-none">
+            <h1 className="h4 mb-0">GitHub Explorer</h1>
+          </Link>
         </div>
       </header>
 
@@ -11,7 +16,7 @@ function App() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12 col-md-10 col-lg-8">
-              <p className="text-muted mb-0">Application shell ready.</p>
+              <Outlet />
             </div>
           </div>
         </div>
