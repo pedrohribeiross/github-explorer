@@ -1,3 +1,7 @@
 export { LoadingSpinner } from './LoadingSpinner'
 export { ErrorMessage } from './ErrorMessage'
 export { Layout } from './Layout'
+export { UserCard } from './UserCard'
+export { RepositoryList } from './RepositoryList'
+export { RepositoryListItem } from './RepositoryListItem'
+export { SortSelector } from './SortSelector'
