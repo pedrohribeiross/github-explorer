@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { ApiErrorMessage, LoadingSpinner } from '../components'
+import { AsyncSection } from '../components'
 import { useRepository } from '../hooks'
 import { buildUserProfilePath } from '../routes'
 
@@ -13,46 +13,39 @@ export const RepositoryDetailPage = () => {
         ← Voltar para o perfil
       </Link>
 
-      {repository.loading && <LoadingSpinner />}
-      {repository.error && (
-        <ApiErrorMessage
-          error={repository.error}
-          notFoundMessage="Repositório não encontrado"
-          onRetry={repository.retry}
-        />
-      )}
+      <AsyncSection state={repository} notFoundMessage="Repositório não encontrado">
+        {(loadedRepository) => (
+          <article className="card">
+            <div className="card-body d-flex flex-column gap-3">
+              <h2 id="repository-detail-title" className="h4 mb-0">
+                {loadedRepository.name}
+              </h2>
 
-      {repository.data && (
-        <article className="card">
-          <div className="card-body d-flex flex-column gap-3">
-            <h2 id="repository-detail-title" className="h4 mb-0">
-              {repository.data.name}
-            </h2>
+              <p className="mb-0">{loadedRepository.description ?? 'Sem descrição'}</p>
 
-            <p className="mb-0">{repository.data.description ?? 'Sem descrição'}</p>
-
-            <div className="d-flex flex-wrap gap-3">
-              <span aria-label={`${repository.data.stargazersCount} estrelas`}>
-                ★ {repository.data.stargazersCount}
-              </span>
-              {repository.data.language && (
-                <span className="badge text-bg-light align-self-center">
-                  {repository.data.language}
+              <div className="d-flex flex-wrap gap-3">
+                <span aria-label={`${loadedRepository.stargazersCount} estrelas`}>
+                  ★ {loadedRepository.stargazersCount}
                 </span>
-              )}
-            </div>
+                {loadedRepository.language && (
+                  <span className="badge text-bg-light align-self-center">
+                    {loadedRepository.language}
+                  </span>
+                )}
+              </div>
 
-            <a
-              href={repository.data.htmlUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary align-self-start"
-            >
-              Ver no GitHub
-            </a>
-          </div>
-        </article>
-      )}
+              <a
+                href={loadedRepository.htmlUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary align-self-start"
+              >
+                Ver no GitHub
+              </a>
+            </div>
+          </article>
+        )}
+      </AsyncSection>
     </section>
   )
 }

@@ -1,12 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  ApiErrorMessage,
-  LoadingSpinner,
-  RepositoryList,
-  SortSelector,
-  UserCard,
-} from '../components'
+import { AsyncSection, RepositoryList, SortSelector, UserCard } from '../components'
 import { useSearchContext } from '../context'
 import { useRepositories, useUser } from '../hooks'
 import { sortRepositories } from '../utils'
@@ -33,15 +27,9 @@ export const UserProfilePage = () => {
         Perfil de {username}
       </h2>
 
-      {user.loading && <LoadingSpinner />}
-      {user.error && (
-        <ApiErrorMessage
-          error={user.error}
-          notFoundMessage="Usuário não encontrado"
-          onRetry={user.retry}
-        />
-      )}
-      {user.data && <UserCard user={user.data} />}
+      <AsyncSection state={user} notFoundMessage="Usuário não encontrado">
+        {(loadedUser) => <UserCard user={loadedUser} />}
+      </AsyncSection>
 
       <div>
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-3">
@@ -49,17 +37,9 @@ export const UserProfilePage = () => {
           <SortSelector value={sortOption} onChange={setSortOption} />
         </div>
 
-        {repositories.loading && <LoadingSpinner />}
-        {repositories.error && (
-          <ApiErrorMessage
-            error={repositories.error}
-            notFoundMessage="Usuário não encontrado"
-            onRetry={repositories.retry}
-          />
-        )}
-        {repositories.data && (
-          <RepositoryList username={username} repositories={sortedRepositories} />
-        )}
+        <AsyncSection state={repositories} notFoundMessage="Usuário não encontrado">
+          {() => <RepositoryList username={username} repositories={sortedRepositories} />}
+        </AsyncSection>
       </div>
     </section>
   )
