@@ -5,12 +5,39 @@ interface DescribeApiErrorOptions {
   notFoundMessage: string
 }
 
+const isRateLimited = (status: number, remaining: string | undefined): boolean =>
+  status === 403 && remaining === '0'
+
 export const describeApiError = (error: Error, options: DescribeApiErrorOptions): ApiErrorInfo => {
-  if (isAxiosError(error) && error.response?.status === 404) {
-    return {
-      kind: 'notFound',
-      message: options.notFoundMessage,
-      retriable: false,
+  if (isAxiosError(error)) {
+    const status = error.response?.status
+
+    if (status === 404) {
+      return {
+        kind: 'notFound',
+        message: options.notFoundMessage,
+        retriable: false,
+      }
+    }
+
+    if (
+      status !== undefined &&
+      isRateLimited(status, error.response?.headers['x-ratelimit-remaining'])
+    ) {
+      return {
+        kind: 'rateLimit',
+        message:
+          'Limite de requisições da API do GitHub atingido. Aguarde alguns minutos e tente novamente',
+        retriable: false,
+      }
+    }
+
+    if (error.response === undefined) {
+      return {
+        kind: 'network',
+        message: 'Falha de conexão. Verifique sua internet e tente novamente',
+        retriable: true,
+      }
     }
   }
 
