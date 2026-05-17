@@ -11,9 +11,7 @@ export const NotFoundPage = () => {
       <h2 id="not-found-title" className="h3 fw-bold mb-2">
         Página não encontrada
       </h2>
-      <p className="text-secondary mb-4">
-        A página que você procura não existe ou foi movida.
-      </p>
+      <p className="text-secondary mb-4">A página que você procura não existe ou foi movida.</p>
       <Link
         to={ROUTE_PATHS.search}
         className="btn app-btn-gradient app-shadow-accent w-100 app-w-sm-auto"
