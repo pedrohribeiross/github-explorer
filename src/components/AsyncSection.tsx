@@ -20,6 +20,7 @@ export const AsyncSection = <TData,>({
       <ErrorMessage
         message="Você está offline. Verifique sua conexão e tente novamente"
         onRetry={state.retry}
+        variant="offline"
       />
     )
   }
