@@ -12,6 +12,8 @@ export const SearchPage = () => {
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState<string | null>(null)
 
+  const exampleUsernames = ['torvalds', 'gaearon', 'tj']
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmed = inputValue.trim()
@@ -74,6 +76,23 @@ export const SearchPage = () => {
             </button>
           </form>
         </div>
+
+        <p className="d-flex flex-wrap align-items-center gap-2 mt-3 mb-0 small text-secondary">
+          <span>Exemplos:</span>
+          {exampleUsernames.map((example) => (
+            <button
+              key={example}
+              type="button"
+              className="btn btn-link p-0 px-1 py-2 text-decoration-none link-primary"
+              onClick={() => {
+                setInputValue(example)
+                setError(null)
+              }}
+            >
+              {example}
+            </button>
+          ))}
+        </p>
       </div>
     </section>
   )
