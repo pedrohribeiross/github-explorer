@@ -6,4 +6,5 @@ export interface User {
   email: string | null
   followers: number
   following: number
+  publicRepos: number
 }

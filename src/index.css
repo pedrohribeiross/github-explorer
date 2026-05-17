@@ -1,5 +1,17 @@
+/* ==========================================================================
+   Theme layer — Midnight Dark
+   Bootstrap-only: overrides Bootstrap CSS custom properties (--bs-*).
+   No Tailwind, no third-party stylesheets, no preprocessor.
+   See doc/design/ESPECIFICACAO-REDESIGN.md §4.
+
+   Mobile-first convention (ESPECIFICACAO §5 / R04b): markup base state is
+   mobile, scaling up with sm/md/lg. Theme rules here are layout-neutral —
+   no fixed width/min-width/height that could overflow the smallest target
+   viewport (360px). Cosmetic only: color, gradient, shadow.
+   ========================================================================== */
+
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
@@ -8,4 +20,198 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+/* --------------------------------------------------------------------------
+   Midnight palette mapped onto Bootstrap variables (ESPECIFICACAO §4)
+   -------------------------------------------------------------------------- */
+[data-bs-theme='dark'] {
+  --bs-body-bg: #020617;
+  --bs-body-color: #ffffff;
+  --bs-heading-color: #ffffff;
+
+  --bs-secondary-color: #cbd5e1;
+  --bs-secondary-color-rgb: 203, 213, 225;
+  --bs-tertiary-color: #94a3b8;
+  --bs-tertiary-color-rgb: 148, 163, 184;
+
+  --bs-primary: #60a5fa;
+  --bs-primary-rgb: 96, 165, 250;
+  --bs-link-color: #60a5fa;
+  --bs-link-color-rgb: 96, 165, 250;
+  --bs-link-hover-color: #93c5fd;
+  --bs-link-hover-color-rgb: 147, 197, 253;
+
+  --bs-border-color: #334155;
+  --bs-border-color-translucent: rgba(51, 65, 85, 0.5);
+
+  --bs-secondary-bg: #0f172a;
+  --bs-tertiary-bg: #0f172a;
+
+  --bs-card-bg: #1e293b;
+  --bs-card-color: #ffffff;
+  --bs-card-border-color: #334155;
+
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+}
+
+[data-bs-theme='dark'] ::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   App state variables (ESPECIFICACAO §4 — statistic badge colors + accents)
+   Own tokens, app- prefixed, no Bootstrap collision. No glassmorphism (D5).
+   -------------------------------------------------------------------------- */
+[data-bs-theme='dark'] {
+  --app-stars: #facc15;
+  --app-forks: #60a5fa;
+  --app-watchers: #4ade80;
+  --app-issues: #f87171;
+  --app-accent: #3b82f6;
+  --app-surface: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   App utility classes (ESPECIFICACAO §4 — effects with no Bootstrap analog)
+   Purely cosmetic and layout-neutral: no width/min-width (R04b/§5.4).
+   -------------------------------------------------------------------------- */
+.app-btn-gradient {
+  background-image: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.app-btn-gradient:hover,
+.app-btn-gradient:focus {
+  background-image: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.app-shadow {
+  box-shadow: 0 1.5rem 3rem rgba(2, 6, 23, 0.6);
+}
+
+.app-shadow-accent {
+  box-shadow: 0 0.75rem 2rem rgba(59, 130, 246, 0.3);
+}
+
+.app-surface {
+  background-color: var(--app-surface);
+}
+
+/* Anti-overflow helper: lets a flex child shrink below its content size so
+   text-break/text-truncate can contain long repo names/descriptions on the
+   smallest target viewport (R04b/§5.1/§5.4). Not cosmetic — enables shrink,
+   never imposes a fixed width. Bootstrap 5.3 has no min-w-0 equivalent. */
+.app-min-w-0 {
+  min-width: 0;
+}
+
+/* Repository list card: blue border + soft blue shadow on hover/focus
+   (SITEMAP §2 lines 362-365). Cosmetic and layout-neutral. */
+.app-repo-card {
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.app-repo-card:hover,
+.app-repo-card:focus-visible {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0.5rem 1.5rem rgba(59, 130, 246, 0.1);
+}
+
+/* width:auto from the Bootstrap sm breakpoint up (>=576px). Mobile-first:
+   base stays full-width via w-100, widening only on sm+ (R04b/§5.x).
+   Bootstrap 5.3 ships no responsive w-* variants. Layout helper, no fixed
+   width imposed. */
+@media (min-width: 576px) {
+  .app-w-sm-auto {
+    width: auto !important;
+  }
+
+  /* Stop a flex child from growing/shrinking from sm+ so it keeps its
+     natural size in a flex row (e.g. SortSelector pinned right of the
+     "Repositórios" title via justify-content-between). Mobile-first:
+     no effect on the stacked < sm layout. Bootstrap has no flex-sm-none. */
+  .app-flex-sm-none {
+    flex: 0 0 auto !important;
+  }
+}
+
+/* SearchPage form block width cap (R22/M-D3). Mobile-first: base is fluid
+   (w-100, no cap) so it never overflows 360px; from sm (>=576px) it caps at
+   28rem = 448px (STYLE_GUIDE §116 max-w-md; 448 = 56 * 8px grid) and centers,
+   keeping the card compact and close to the title on desktop. Max-width only,
+   no fixed width. */
+@media (min-width: 576px) {
+  .app-search-block {
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+}
+
+/* SearchPage example links (R23/M-D4): no underline at rest, lighter accent
+   (--bs-link-hover-color = blue-300) + underline on hover/focus. Cosmetic
+   only, layout-neutral. */
+.app-example-link {
+  text-decoration: none;
+}
+
+.app-example-link:hover,
+.app-example-link:focus-visible {
+  color: var(--bs-link-hover-color) !important;
+  text-decoration: underline;
+}
+
+/* SearchPage CTA height pinned to 48px (R24/M-D5): matches the .form-control-lg
+   input height so the button never exceeds the input. Height only, no fixed
+   width — stays w-100 and layout-neutral, mobile-first. */
+.app-search-cta {
+  height: 2.75rem;
+}
+
+/* SearchPage input: fixed 48px height (SITEMAP §1 line 145) and 16px font
+   (R24/M-D5). .form-control-lg ships a taller box + 1.25rem font; this pins
+   height/size to the spec. Height is bounded (48px) and the field stays
+   w-100/fluid in width, so it is layout-neutral and never overflows 360px. */
+.app-search-input {
+  height: 3rem;
+  font-size: 1rem;
+}
+
+/* Perfect-square icon badge for repository stats (R30). Mobile-first:
+   smaller on the base viewport so 2-col stats never crowd 360px, growing
+   on md+. Fixed size is intentional and bounded (well under the ~328px
+   usable width at 360px even at 2 columns), per §5.1. Layout: equal
+   width/height = perfect square; flex children must not stretch it. */
+.app-stat-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .app-stat-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+/* Bootstrap .display-1 font-size from the md breakpoint up (>=768px).
+   Mobile-first: base stays at .display-2 so the 404 never overflows 360px,
+   scaling up on md+ (R14/§6.5). Bootstrap has no responsive display-* . */
+@media (min-width: 768px) {
+  .app-display-1-md {
+    font-size: calc(1.625rem + 4.5vw);
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-display-1-md {
+    font-size: 5rem;
+  }
 }

@@ -6,12 +6,12 @@ import {
   SearchPage,
   UserProfilePage,
 } from '../pages'
-import App from '../App'
+import { RootLayout } from '../components'
 import { ROUTE_PATHS } from './paths'
 
 export const appRouter = createBrowserRouter([
   {
-    element: <App />,
+    element: <RootLayout />,
     children: [
       {
         errorElement: <RouteErrorPage />,

@@ -1,73 +1,210 @@
-# React + TypeScript + Vite
+# Buscador de Repositórios do GitHub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web client-side que consulta a API pública do GitHub para buscar um
+usuário, exibir seus dados de perfil e listar seus repositórios mais
+populares, com uma página dedicada ao detalhe de cada repositório. Não há
+back-end próprio: todo o consumo de dados é feito direto do navegador contra
+`https://api.github.com`.
 
-Currently, two official plugins are available:
+## Sumário
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Funcionalidades](#funcionalidades)
+- [Como funciona](#como-funciona)
+- [Arquitetura](#arquitetura)
+- [Stack](#stack)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação](#instalação)
+- [Scripts](#scripts)
+- [Rodando em desenvolvimento](#rodando-em-desenvolvimento)
+- [Build de produção](#build-de-produção)
+- [Testes](#testes)
+- [Tratamento de erros e estados](#tratamento-de-erros-e-estados)
+- [Demo](#demo)
 
-## React Compiler
+## Funcionalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Busca de usuário** — campo de busca por _username_ com validação de
+  formato antes de disparar a requisição.
+- **Perfil do usuário** — avatar, bio, e-mail, número de seguidores e número
+  de seguidos.
+- **Listagem de repositórios** — todos os repositórios públicos do usuário,
+  ordenados por estrelas em ordem decrescente por padrão.
+- **Reordenação da listagem** — o usuário pode alternar entre cinco critérios:
+  estrelas (decrescente/crescente), nome (A–Z / Z–A) e mais recentes (data de
+  atualização).
+- **Detalhe do repositório** — página própria com nome, descrição, número de
+  estrelas, linguagem e link externo para o repositório no GitHub.
+- **Navegação por rotas** — fluxo busca → perfil → detalhe, com URLs
+  compartilháveis e tratamento de rota inexistente.
 
-## Expanding the ESLint configuration
+## Como funciona
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+A aplicação consome três endpoints da API do GitHub, sem autenticação:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Operação | Endpoint |
+| --- | --- |
+| Detalhes do usuário | `GET /users/{username}` |
+| Repositórios do usuário | `GET /users/{username}/repos?per_page=100` |
+| Detalhes do repositório | `GET /repos/{owner}/{repo}` |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+A ordenação por estrelas é feita **no cliente**, não pela API. O endpoint de
+repositórios é buscado com `per_page=100` e a ordenação é aplicada no
+navegador por uma função pura que não muta o array original, permitindo trocar
+o critério de ordenação sem nova requisição à rede.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+As respostas da API são cacheadas pelo React Query com `staleTime` de 5
+minutos e deduplicação automática, evitando requisições redundantes — relevante
+porque o limite não autenticado da API do GitHub é de **60 requisições por
+hora**. O `retry` é seletivo: erros 4xx (usuário inexistente, rate limit) não
+são repetidos, pois não há chance de sucesso; falhas de rede e 5xx têm uma
+tentativa adicional.
+
+## Arquitetura
+
+Organização em camadas com direção de dependência estrita — componentes de
+apresentação nunca fazem HTTP diretamente:
+
+```
+pages / components  →  hooks  →  services  →  api (cliente Axios)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  api/         Cliente Axios, QueryClient e builders de chave de query
+  services/    Funções de acesso a dados (githubService)
+  domain/      Modelos de domínio (User, Repository, SortOption)
+  types/       Interfaces de resposta da API (uma por arquivo)
+  mappers/     Transformações API → domínio (uma por arquivo)
+  hooks/       Hooks de dados (useUser, useRepositories, useRepository)
+  context/     SearchContext — estado de cliente compartilhado
+  components/  Componentes de UI reutilizáveis
+  pages/       Páginas mapeadas para rotas
+  routes/      Definição das rotas
+  utils/       Funções puras (ordenação, formatação, validação)
+```
+
+Princípios aplicados:
+
+- **Separação de responsabilidades** — o React Query vive dentro da camada
+  `hooks/`; os componentes não conhecem a biblioteca, consumindo apenas um
+  contrato `loading` / `error` / `data`.
+- **Tipos e funções separados** — declarações de tipo e funções nunca
+  coexistem no mesmo arquivo; tipos ficam em `types/`, transformações em
+  `mappers/`, cada um com responsabilidade única.
+- **Estado de cliente vs. servidor** — `SearchContext` guarda apenas o
+  _username_ atual e o critério de ordenação; o estado de servidor (respostas
+  cacheáveis da API) é responsabilidade exclusiva do React Query. Sem store
+  global.
+- **Código autoexplicativo** — sem comentários; nomenclatura descritiva em
+  inglês. Todo texto exibido ao usuário final é em português (pt-BR).
+
+### Rotas
+
+| Rota | Página |
+| --- | --- |
+| `/` | Busca por _username_ |
+| `/user/:username` | Perfil + listagem de repositórios |
+| `/user/:username/repo/:repoName` | Detalhe de um repositório |
+| `*` | Página de rota não encontrada |
+
+## Stack
+
+| Camada | Ferramenta |
+| --- | --- |
+| Linguagem | TypeScript (modo `strict`) |
+| UI | React 19 |
+| Build / Dev server | Vite |
+| Roteamento | React Router v6 |
+| HTTP client | Axios |
+| Estilo / responsividade | Bootstrap 5 + Bootstrap Icons |
+| Estado de cliente | React Context API |
+| Estado de servidor | TanStack React Query v5 |
+| Testes | Jest + React Testing Library |
+| Lint / Format | ESLint + Prettier |
+
+## Pré-requisitos
+
+- Node.js 20 ou superior (desenvolvido com Node 24).
+- npm 10 ou superior.
+
+## Instalação
+
+Todos os comandos são executados a partir deste diretório
+(`code-group-desafio/`):
+
+```bash
+npm install
+```
+
+## Scripts
+
+| Script | Descrição |
+| --- | --- |
+| `npm run dev` | Servidor de desenvolvimento Vite com HMR. |
+| `npm run build` | Verifica tipos (`tsc -b`) e gera o build de produção em `dist/`. |
+| `npm run preview` | Serve localmente o build de produção. |
+| `npm run lint` | Executa o ESLint sobre o projeto. |
+| `npm run typecheck` | Verificação de tipos do app e da configuração de teste. |
+| `npm run format` | Formata o código com Prettier. |
+| `npm run format:check` | Verifica a formatação sem alterar arquivos. |
+| `npm test` | Executa a suíte de testes Jest. |
+| `npm run test:watch` | Executa os testes em modo _watch_. |
+| `npm run test:coverage` | Executa os testes com relatório de cobertura. |
+
+## Rodando em desenvolvimento
+
+```bash
+npm run dev
+```
+
+O Vite imprime a URL local no terminal (por padrão
+`http://localhost:5173`). A aplicação já consome a API pública do GitHub sem
+configuração adicional — não há variáveis de ambiente nem chaves a definir.
+
+Em modo de desenvolvimento, os React Query Devtools ficam disponíveis no canto
+da tela para inspeção do cache e do estado das requisições; eles não são
+incluídos no build de produção.
+
+## Build de produção
+
+```bash
+npm run build
+npm run preview
+```
+
+O `build` roda `tsc -b` antes do empacotamento, portanto qualquer erro de tipo
+reprova o build. O artefato final é gerado em `dist/` e pode ser servido por
+qualquer host de arquivos estáticos.
+
+## Testes
+
+```bash
+npm test
+```
+
+A suíte é organizada por camada:
+
+- **Services** — mock do Axios, validando chamadas e _parsing_ das respostas.
+- **Utils** — ordenação e formatação testadas com casos puros.
+- **Hooks** — estados de loading, erro e sucesso, renderizados com um
+  `QueryClientProvider` isolado por teste.
+- **Componentes-chave** — busca, listagem e detalhe renderizam os dados
+  corretos e a navegação funciona.
+
+## Tratamento de erros e estados
+
+Cada cenário tem uma mensagem específica em português:
+
+| Cenário | Comportamento |
+| --- | --- |
+| Usuário não encontrado (404) | Mensagem "Usuário não encontrado". |
+| Rate limit atingido (403) | Mensagem orientando aguardar. |
+| Falha de rede | Mensagem genérica com opção de tentar novamente. |
+| Sem conexão (offline) | Aviso dedicado com retry, sem spinner infinito. |
+| Carregando | Indicador de loading (spinner Bootstrap). |
+| Lista de repositórios vazia | Mensagem "Nenhum repositório encontrado". |
+| Erro de renderização / rota | Tela de erro com botão de retorno, preservando o layout. |
+
+## Demo
+
+URL da demo: _a ser adicionada após o deploy_.

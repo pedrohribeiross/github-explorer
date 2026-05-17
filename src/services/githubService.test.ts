@@ -16,6 +16,7 @@ const userResponse: GitHubUserResponse = {
   email: 'octocat@github.com',
   followers: 100,
   following: 10,
+  public_repos: 8,
 }
 
 const repositoryResponse: GitHubRepositoryResponse = {
@@ -24,6 +25,9 @@ const repositoryResponse: GitHubRepositoryResponse = {
   full_name: 'octocat/hello-world',
   description: 'My first repo',
   stargazers_count: 1500,
+  forks_count: 200,
+  watchers_count: 1500,
+  open_issues_count: 12,
   language: 'TypeScript',
   html_url: 'https://github.com/octocat/hello-world',
   updated_at: '2024-06-01T00:00:00Z',
@@ -52,6 +56,7 @@ describe('githubService', () => {
         email: 'octocat@github.com',
         followers: 100,
         following: 10,
+        publicRepos: 8,
       })
     })
 
@@ -86,6 +91,9 @@ describe('githubService', () => {
           fullName: 'octocat/hello-world',
           description: 'My first repo',
           stargazersCount: 1500,
+          forksCount: 200,
+          watchersCount: 1500,
+          openIssuesCount: 12,
           language: 'TypeScript',
           htmlUrl: 'https://github.com/octocat/hello-world',
           updatedAt: '2024-06-01T00:00:00Z',
@@ -122,6 +130,9 @@ describe('githubService', () => {
         fullName: 'octocat/hello-world',
         description: 'My first repo',
         stargazersCount: 1500,
+        forksCount: 200,
+        watchersCount: 1500,
+        openIssuesCount: 12,
         language: 'TypeScript',
         htmlUrl: 'https://github.com/octocat/hello-world',
         updatedAt: '2024-06-01T00:00:00Z',

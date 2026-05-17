@@ -10,16 +10,16 @@ interface RepositoryListProps {
 
 export const RepositoryList = ({ username, repositories }: RepositoryListProps) => {
   if (repositories.length === 0) {
-    return <p className="text-muted mb-0">Nenhum repositório encontrado</p>
+    return <p className="text-center text-tertiary py-5 mb-0">Nenhum repositório encontrado</p>
   }
 
   return (
-    <ul className="list-group">
+    <ul className="list-unstyled d-flex flex-column gap-3 w-100 mb-0">
       {repositories.map((repository) => (
-        <li key={repository.id} className="list-group-item list-group-item-action p-0">
+        <li key={repository.id}>
           <Link
             to={buildRepositoryDetailPath(username, repository.name)}
-            className="d-block text-reset text-decoration-none p-3"
+            className="app-repo-card d-block text-reset text-decoration-none app-surface border rounded-3 p-3"
           >
             <RepositoryListItem repository={repository} />
           </Link>

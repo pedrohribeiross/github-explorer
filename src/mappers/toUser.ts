@@ -9,4 +9,5 @@ export const toUser = (data: GitHubUserResponse): User => ({
   email: data.email,
   followers: data.followers,
   following: data.following,
+  publicRepos: data.public_repos,
 })

@@ -8,6 +8,8 @@ const comparators: Record<SortOption, Comparator> = {
   [SORT_OPTIONS.starsAsc]: (a, b) => a.stargazersCount - b.stargazersCount,
   [SORT_OPTIONS.nameAsc]: (a, b) =>
     a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+  [SORT_OPTIONS.nameDesc]: (a, b) =>
+    b.name.localeCompare(a.name, undefined, { sensitivity: 'base' }),
   [SORT_OPTIONS.recent]: (a, b) =>
     new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
 }

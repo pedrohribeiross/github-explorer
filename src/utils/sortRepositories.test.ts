@@ -8,6 +8,9 @@ const makeRepository = (overrides: Partial<Repository>): Repository => ({
   fullName: 'owner/repo',
   description: null,
   stargazersCount: 0,
+  forksCount: 0,
+  watchersCount: 0,
+  openIssuesCount: 0,
   language: null,
   htmlUrl: 'https://github.com/owner/repo',
   updatedAt: '2020-01-01T00:00:00Z',
@@ -52,6 +55,12 @@ describe('sortRepositories', () => {
     const result = sortRepositories(repositories, SORT_OPTIONS.nameAsc)
 
     expect(result.map((repo) => repo.name)).toEqual(['alpha', 'Beta', 'gamma'])
+  })
+
+  it('orders by name Z–A case-insensitively', () => {
+    const result = sortRepositories(repositories, SORT_OPTIONS.nameDesc)
+
+    expect(result.map((repo) => repo.name)).toEqual(['gamma', 'Beta', 'alpha'])
   })
 
   it('orders by most recently updated first', () => {

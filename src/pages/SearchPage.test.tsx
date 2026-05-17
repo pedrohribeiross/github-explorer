@@ -37,9 +37,9 @@ describe('SearchPage', () => {
   it('renders the search form', () => {
     renderSearchPage()
 
-    expect(screen.getByRole('heading', { name: 'Buscar usuário do GitHub' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'GitHub Explorer' })).toBeInTheDocument()
     expect(screen.getByLabelText('Nome de usuário')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Buscar' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Buscar usuário' })).toBeInTheDocument()
   })
 
   it('navigates to the user profile route on valid submission', async () => {
@@ -47,7 +47,7 @@ describe('SearchPage', () => {
     renderSearchPage()
 
     await user.type(screen.getByLabelText('Nome de usuário'), 'octocat')
-    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+    await user.click(screen.getByRole('button', { name: 'Buscar usuário' }))
 
     expect(screen.getByText(profileTextFor('octocat'))).toBeInTheDocument()
   })
@@ -57,7 +57,7 @@ describe('SearchPage', () => {
     renderSearchPage()
 
     await user.type(screen.getByLabelText('Nome de usuário'), '  octocat  ')
-    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+    await user.click(screen.getByRole('button', { name: 'Buscar usuário' }))
 
     expect(screen.getByText(profileTextFor('octocat'))).toBeInTheDocument()
   })
@@ -67,7 +67,7 @@ describe('SearchPage', () => {
     renderSearchPage()
 
     await user.type(screen.getByLabelText('Nome de usuário'), '-invalid-')
-    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+    await user.click(screen.getByRole('button', { name: 'Buscar usuário' }))
 
     expect(screen.getByText('Informe um nome de usuário válido do GitHub')).toBeInTheDocument()
     expect(screen.queryByText(/^perfil de /)).not.toBeInTheDocument()
@@ -80,12 +80,12 @@ describe('SearchPage', () => {
     const input = screen.getByLabelText('Nome de usuário')
 
     await user.type(input, '-invalid-')
-    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+    await user.click(screen.getByRole('button', { name: 'Buscar usuário' }))
     expect(screen.getByText('Informe um nome de usuário válido do GitHub')).toBeInTheDocument()
 
     await user.clear(input)
     await user.type(input, 'octocat')
-    await user.click(screen.getByRole('button', { name: 'Buscar' }))
+    await user.click(screen.getByRole('button', { name: 'Buscar usuário' }))
 
     expect(screen.getByText(profileTextFor('octocat'))).toBeInTheDocument()
   })

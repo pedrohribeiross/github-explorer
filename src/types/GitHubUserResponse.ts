@@ -6,4 +6,5 @@ export interface GitHubUserResponse {
   email: string | null
   followers: number
   following: number
+  public_repos: number
 }
