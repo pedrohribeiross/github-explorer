@@ -25,13 +25,14 @@ export const SortSelector = ({ value, onChange }: SortSelectorProps) => {
   const selectId = useId()
 
   return (
-    <div className="flex-shrink-0">
-      <label htmlFor={selectId} className="form-label">
-        Ordenar por
+    <div className="d-flex align-items-center gap-2 w-100 app-w-sm-auto app-flex-sm-none">
+      <label htmlFor={selectId} className="form-label mb-0 d-flex align-items-center">
+        <i className="bi bi-arrow-down-up fs-5 text-tertiary" aria-hidden="true" />
+        <span className="visually-hidden">Ordenar por</span>
       </label>
       <select
         id={selectId}
-        className="form-select"
+        className="form-select app-surface w-100 app-w-sm-auto"
         value={value}
         onChange={(event) => onChange(event.target.value as SortOption)}
       >

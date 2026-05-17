@@ -32,7 +32,7 @@ export const UserProfilePage = () => {
       </AsyncSection>
 
       <div>
-        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-3">
+        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
           <h3 className="h5 mb-0">Repositórios</h3>
           <SortSelector value={sortOption} onChange={setSortOption} />
         </div>

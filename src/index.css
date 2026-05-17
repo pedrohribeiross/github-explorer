@@ -124,3 +124,21 @@ body {
   border-color: rgba(59, 130, 246, 0.5) !important;
   box-shadow: 0 0.5rem 1.5rem rgba(59, 130, 246, 0.1);
 }
+
+/* width:auto from the Bootstrap sm breakpoint up (>=576px). Mobile-first:
+   base stays full-width via w-100, widening only on sm+ (R04b/§5.x).
+   Bootstrap 5.3 ships no responsive w-* variants. Layout helper, no fixed
+   width imposed. */
+@media (min-width: 576px) {
+  .app-w-sm-auto {
+    width: auto !important;
+  }
+
+  /* Stop a flex child from growing/shrinking from sm+ so it keeps its
+     natural size in a flex row (e.g. SortSelector pinned right of the
+     "Repositórios" title via justify-content-between). Mobile-first:
+     no effect on the stacked < sm layout. Bootstrap has no flex-sm-none. */
+  .app-flex-sm-none {
+    flex: 0 0 auto !important;
+  }
+}
