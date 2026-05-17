@@ -142,3 +142,18 @@ body {
     flex: 0 0 auto !important;
   }
 }
+
+/* Bootstrap .display-1 font-size from the md breakpoint up (>=768px).
+   Mobile-first: base stays at .display-2 so the 404 never overflows 360px,
+   scaling up on md+ (R14/§6.5). Bootstrap has no responsive display-* . */
+@media (min-width: 768px) {
+  .app-display-1-md {
+    font-size: calc(1.625rem + 4.5vw);
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-display-1-md {
+    font-size: 5rem;
+  }
+}
