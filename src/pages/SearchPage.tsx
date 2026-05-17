@@ -27,37 +27,54 @@ export const SearchPage = () => {
   }
 
   return (
-    <section aria-labelledby="search-page-title">
-      <h2 id="search-page-title" className="h4 mb-4">
-        Buscar usuário do GitHub
-      </h2>
+    <section
+      aria-labelledby="search-page-title"
+      className="flex-grow-1 d-flex flex-column align-items-center justify-content-center text-center"
+    >
+      <span
+        className="d-inline-flex align-items-center justify-content-center rounded-circle app-surface border mb-4"
+        style={{ width: '5rem', height: '5rem' }}
+        aria-hidden="true"
+      >
+        <i className="bi bi-search fs-2 text-primary" />
+      </span>
 
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="mb-3">
-          <label htmlFor={inputId} className="form-label">
-            Nome de usuário
-          </label>
-          <input
-            id={inputId}
-            type="text"
-            className={error ? 'form-control is-invalid' : 'form-control'}
-            placeholder="ex.: octocat"
-            value={inputValue}
-            onChange={(event) => setInputValue(event.target.value)}
-            autoComplete="off"
-            aria-describedby={error ? `${inputId}-error` : undefined}
-          />
-          {error && (
-            <div id={`${inputId}-error`} className="invalid-feedback">
-              {error}
+      <h1 id="search-page-title" className="display-6 fw-bold mb-2">
+        GitHub Explorer
+      </h1>
+      <p className="text-secondary mb-4">Busque e explore perfis do GitHub</p>
+
+      <div className="w-100 col-12 col-sm-10 col-md-8 col-lg-6">
+        <div className="app-surface app-shadow border rounded-4 p-4 text-start">
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="mb-3">
+              <label htmlFor={inputId} className="form-label fw-medium">
+                Nome de usuário
+              </label>
+              <input
+                id={inputId}
+                type="text"
+                className={error ? 'form-control is-invalid' : 'form-control'}
+                placeholder="Digite o username do GitHub"
+                value={inputValue}
+                onChange={(event) => setInputValue(event.target.value)}
+                autoComplete="off"
+                aria-describedby={error ? `${inputId}-error` : undefined}
+              />
+              {error && (
+                <div id={`${inputId}-error`} className="invalid-feedback">
+                  {error}
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <button type="submit" className="btn btn-primary">
-          Buscar
-        </button>
-      </form>
+            <button type="submit" className="btn app-btn-gradient app-shadow-accent w-100">
+              <i className="bi bi-search me-2" aria-hidden="true" />
+              Buscar usuário
+            </button>
+          </form>
+        </div>
+      </div>
     </section>
   )
 }
