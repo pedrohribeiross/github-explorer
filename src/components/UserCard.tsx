@@ -61,10 +61,7 @@ export const UserCard = ({ user }: UserCardProps) => {
             <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
               <i className="bi bi-diagram-2 fs-4 text-primary" aria-hidden="true" />
               <div>
-                <div
-                  className="fs-4 fw-bold lh-1"
-                  aria-label={`${user.publicRepos} repositórios`}
-                >
+                <div className="fs-4 fw-bold lh-1" aria-label={`${user.publicRepos} repositórios`}>
                   {formatCompactNumber(user.publicRepos)}
                 </div>
                 <div className="small text-tertiary">Repositórios</div>
