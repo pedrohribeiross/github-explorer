@@ -1,4 +1,5 @@
 import type { Repository } from '../domain'
+import { formatCompactNumber } from '../utils'
 
 interface RepositoryListItemProps {
   repository: Repository
@@ -29,7 +30,7 @@ export const RepositoryListItem = ({ repository }: RepositoryListItemProps) => {
         aria-label={`${repository.stargazersCount} estrelas`}
       >
         <i className="bi bi-star-fill" aria-hidden="true" />
-        {repository.stargazersCount}
+        {formatCompactNumber(repository.stargazersCount)}
       </span>
     </div>
   )
