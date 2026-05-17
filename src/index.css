@@ -3,6 +3,11 @@
    Bootstrap-only: overrides Bootstrap CSS custom properties (--bs-*).
    No Tailwind, no third-party stylesheets, no preprocessor.
    See doc/design/ESPECIFICACAO-REDESIGN.md §4.
+
+   Mobile-first convention (ESPECIFICACAO §5 / R04b): markup base state is
+   mobile, scaling up with sm/md/lg. Theme rules here are layout-neutral —
+   no fixed width/min-width/height that could overflow the smallest target
+   viewport (360px). Cosmetic only: color, gradient, shadow.
    ========================================================================== */
 
 :root {
@@ -92,4 +97,8 @@ body {
 
 .app-shadow-accent {
   box-shadow: 0 0.75rem 2rem rgba(59, 130, 246, 0.3);
+}
+
+.app-surface {
+  background-color: var(--app-surface);
 }
