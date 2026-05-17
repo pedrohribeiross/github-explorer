@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import { AsyncSection, Breadcrumb } from '../components'
 import { useRepository } from '../hooks'
 import { ROUTE_PATHS, buildUserProfilePath } from '../routes'
+import { formatCompactNumber } from '../utils'
 
 export const RepositoryDetailPage = () => {
   const { username = '', repoName = '' } = useParams<'username' | 'repoName'>()
@@ -40,7 +41,7 @@ export const RepositoryDetailPage = () => {
                 <div className="col">
                   <div className="app-surface border rounded-3 p-3 h-100 d-flex align-items-center gap-3">
                     <span
-                      className="d-inline-flex align-items-center justify-content-center rounded-3 p-2 flex-shrink-0"
+                      className="app-stat-icon d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                       style={{
                         color: 'var(--app-stars)',
                         backgroundColor: 'rgba(250, 204, 21, 0.1)',
@@ -54,7 +55,7 @@ export const RepositoryDetailPage = () => {
                         className="fs-5 fw-bold lh-1"
                         aria-label={`${loadedRepository.stargazersCount} estrelas`}
                       >
-                        {loadedRepository.stargazersCount}
+                        {formatCompactNumber(loadedRepository.stargazersCount)}
                       </div>
                       <div className="small text-tertiary">Estrelas</div>
                     </div>
@@ -64,21 +65,21 @@ export const RepositoryDetailPage = () => {
                 <div className="col">
                   <div className="app-surface border rounded-3 p-3 h-100 d-flex align-items-center gap-3">
                     <span
-                      className="d-inline-flex align-items-center justify-content-center rounded-3 p-2 flex-shrink-0"
+                      className="app-stat-icon d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                       style={{
                         color: 'var(--app-forks)',
                         backgroundColor: 'rgba(96, 165, 250, 0.1)',
                       }}
                       aria-hidden="true"
                     >
-                      <i className="bi bi-signpost-split fs-5" />
+                      <i className="bi bi-diagram-2 fs-5" />
                     </span>
                     <div>
                       <div
                         className="fs-5 fw-bold lh-1"
                         aria-label={`${loadedRepository.forksCount} forks`}
                       >
-                        {loadedRepository.forksCount}
+                        {formatCompactNumber(loadedRepository.forksCount)}
                       </div>
                       <div className="small text-tertiary">Forks</div>
                     </div>
@@ -88,7 +89,7 @@ export const RepositoryDetailPage = () => {
                 <div className="col">
                   <div className="app-surface border rounded-3 p-3 h-100 d-flex align-items-center gap-3">
                     <span
-                      className="d-inline-flex align-items-center justify-content-center rounded-3 p-2 flex-shrink-0"
+                      className="app-stat-icon d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                       style={{
                         color: 'var(--app-watchers)',
                         backgroundColor: 'rgba(74, 222, 128, 0.1)',
@@ -102,7 +103,7 @@ export const RepositoryDetailPage = () => {
                         className="fs-5 fw-bold lh-1"
                         aria-label={`${loadedRepository.watchersCount} watchers`}
                       >
-                        {loadedRepository.watchersCount}
+                        {formatCompactNumber(loadedRepository.watchersCount)}
                       </div>
                       <div className="small text-tertiary">Watchers</div>
                     </div>
@@ -112,7 +113,7 @@ export const RepositoryDetailPage = () => {
                 <div className="col">
                   <div className="app-surface border rounded-3 p-3 h-100 d-flex align-items-center gap-3">
                     <span
-                      className="d-inline-flex align-items-center justify-content-center rounded-3 p-2 flex-shrink-0"
+                      className="app-stat-icon d-inline-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
                       style={{
                         color: 'var(--app-issues)',
                         backgroundColor: 'rgba(248, 113, 113, 0.1)',
@@ -126,7 +127,7 @@ export const RepositoryDetailPage = () => {
                         className="fs-5 fw-bold lh-1"
                         aria-label={`${loadedRepository.openIssuesCount} issues`}
                       >
-                        {loadedRepository.openIssuesCount}
+                        {formatCompactNumber(loadedRepository.openIssuesCount)}
                       </div>
                       <div className="small text-tertiary">Issues</div>
                     </div>
@@ -156,8 +157,8 @@ export const RepositoryDetailPage = () => {
                 rel="noopener noreferrer"
                 className="btn app-btn-gradient app-shadow-accent w-100 app-w-sm-auto align-self-sm-start"
               >
+                <i className="bi bi-box-arrow-up-right me-2" aria-hidden="true" />
                 Ver no GitHub
-                <i className="bi bi-box-arrow-up-right ms-2" aria-hidden="true" />
               </a>
             </div>
           </article>
