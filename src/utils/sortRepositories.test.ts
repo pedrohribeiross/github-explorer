@@ -57,6 +57,12 @@ describe('sortRepositories', () => {
     expect(result.map((repo) => repo.name)).toEqual(['alpha', 'Beta', 'gamma'])
   })
 
+  it('orders by name Z–A case-insensitively', () => {
+    const result = sortRepositories(repositories, SORT_OPTIONS.nameDesc)
+
+    expect(result.map((repo) => repo.name)).toEqual(['gamma', 'Beta', 'alpha'])
+  })
+
   it('orders by most recently updated first', () => {
     const result = sortRepositories(repositories, SORT_OPTIONS.recent)
 
