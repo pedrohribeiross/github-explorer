@@ -1,27 +1,40 @@
-# Buscador de Repositórios do GitHub
+<div align="center">
 
-Aplicação web client-side que consulta a API pública do GitHub para buscar um
-usuário, exibir seus dados de perfil e listar seus repositórios mais
-populares, com uma página dedicada ao detalhe de cada repositório. Não há
-back-end próprio: todo o consumo de dados é feito direto do navegador contra
-`https://api.github.com`.
+# 🔍 GitHub Explorer
+
+**Busque um usuário do GitHub, explore seu perfil e navegue pelos seus repositórios mais populares.**
+
+Aplicação web _client-side_ que consome a API pública do GitHub — sem back-end próprio.
+
+[![CI](https://github.com/pedrohribeiross/github-explorer/actions/workflows/ci.yml/badge.svg)](https://github.com/pedrohribeiross/github-explorer/actions/workflows/ci.yml)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-build-646CFF?logo=vite&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap&logoColor=white)
+
+### [▶ Acessar a demo](https://github-explorer-pedrohribeiross.netlify.app)
+
+</div>
+
+---
 
 ## Sumário
 
-- [Funcionalidades](#funcionalidades)
-- [Como funciona](#como-funciona)
-- [Arquitetura](#arquitetura)
-- [Stack](#stack)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Scripts](#scripts)
-- [Rodando em desenvolvimento](#rodando-em-desenvolvimento)
-- [Build de produção](#build-de-produção)
-- [Testes](#testes)
-- [Tratamento de erros e estados](#tratamento-de-erros-e-estados)
-- [Demo](#demo)
+- [✨ Funcionalidades](#-funcionalidades)
+- [⚙️ Como funciona](#️-como-funciona)
+- [🏗️ Arquitetura](#️-arquitetura)
+- [🧰 Stack](#-stack)
+- [📦 Pré-requisitos e instalação](#-pré-requisitos-e-instalação)
+- [📜 Scripts](#-scripts)
+- [🚀 Desenvolvimento e build](#-desenvolvimento-e-build)
+- [🧪 Testes](#-testes)
+- [🛡️ Tratamento de erros e estados](#️-tratamento-de-erros-e-estados)
+- [🔄 CI/CD](#-cicd)
+- [🌐 Demo](#-demo)
 
-## Funcionalidades
+---
+
+## ✨ Funcionalidades
 
 - **Busca de usuário** — campo de busca por _username_ com validação de
   formato antes de disparar a requisição.
@@ -29,15 +42,17 @@ back-end próprio: todo o consumo de dados é feito direto do navegador contra
   de seguidos.
 - **Listagem de repositórios** — todos os repositórios públicos do usuário,
   ordenados por estrelas em ordem decrescente por padrão.
-- **Reordenação da listagem** — o usuário pode alternar entre cinco critérios:
-  estrelas (decrescente/crescente), nome (A–Z / Z–A) e mais recentes (data de
+- **Reordenação da listagem** — alterne entre cinco critérios: estrelas
+  (decrescente/crescente), nome (A–Z / Z–A) e mais recentes (data de
   atualização).
 - **Detalhe do repositório** — página própria com nome, descrição, número de
   estrelas, linguagem e link externo para o repositório no GitHub.
 - **Navegação por rotas** — fluxo busca → perfil → detalhe, com URLs
   compartilháveis e tratamento de rota inexistente.
 
-## Como funciona
+---
+
+## ⚙️ Como funciona
 
 A aplicação consome três endpoints da API do GitHub, sem autenticação:
 
@@ -59,7 +74,9 @@ hora**. O `retry` é seletivo: erros 4xx (usuário inexistente, rate limit) não
 são repetidos, pois não há chance de sucesso; falhas de rede e 5xx têm uma
 tentativa adicional.
 
-## Arquitetura
+---
+
+## 🏗️ Arquitetura
 
 Organização em camadas com direção de dependência estrita — componentes de
 apresentação nunca fazem HTTP diretamente:
@@ -83,7 +100,7 @@ src/
   utils/       Funções puras (ordenação, formatação, validação)
 ```
 
-Princípios aplicados:
+**Princípios aplicados:**
 
 - **Separação de responsabilidades** — o React Query vive dentro da camada
   `hooks/`; os componentes não conhecem a biblioteca, consumindo apenas um
@@ -107,7 +124,9 @@ Princípios aplicados:
 | `/user/:username/repo/:repoName` | Detalhe de um repositório |
 | `*` | Página de rota não encontrada |
 
-## Stack
+---
+
+## 🧰 Stack
 
 | Camada | Ferramenta |
 | --- | --- |
@@ -121,22 +140,26 @@ Princípios aplicados:
 | Estado de servidor | TanStack React Query v5 |
 | Testes | Jest + React Testing Library |
 | Lint / Format | ESLint + Prettier |
+| CI/CD | GitHub Actions + Netlify |
 
-## Pré-requisitos
+---
+
+## 📦 Pré-requisitos e instalação
 
 - Node.js 20 ou superior (desenvolvido com Node 24).
 - npm 10 ou superior.
 
-## Instalação
-
-Todos os comandos são executados a partir deste diretório
-(`code-group-desafio/`):
+Clone o repositório e instale as dependências a partir da raiz do projeto:
 
 ```bash
+git clone https://github.com/pedrohribeiross/github-explorer.git
+cd github-explorer
 npm install
 ```
 
-## Scripts
+---
+
+## 📜 Scripts
 
 | Script | Descrição |
 | --- | --- |
@@ -151,7 +174,11 @@ npm install
 | `npm run test:watch` | Executa os testes em modo _watch_. |
 | `npm run test:coverage` | Executa os testes com relatório de cobertura. |
 
-## Rodando em desenvolvimento
+---
+
+## 🚀 Desenvolvimento e build
+
+**Desenvolvimento:**
 
 ```bash
 npm run dev
@@ -165,7 +192,7 @@ Em modo de desenvolvimento, os React Query Devtools ficam disponíveis no canto
 da tela para inspeção do cache e do estado das requisições; eles não são
 incluídos no build de produção.
 
-## Build de produção
+**Build de produção:**
 
 ```bash
 npm run build
@@ -176,7 +203,9 @@ O `build` roda `tsc -b` antes do empacotamento, portanto qualquer erro de tipo
 reprova o build. O artefato final é gerado em `dist/` e pode ser servido por
 qualquer host de arquivos estáticos.
 
-## Testes
+---
+
+## 🧪 Testes
 
 ```bash
 npm test
@@ -191,7 +220,9 @@ A suíte é organizada por camada:
 - **Componentes-chave** — busca, listagem e detalhe renderizam os dados
   corretos e a navegação funciona.
 
-## Tratamento de erros e estados
+---
+
+## 🛡️ Tratamento de erros e estados
 
 Cada cenário tem uma mensagem específica em português:
 
@@ -205,6 +236,28 @@ Cada cenário tem uma mensagem específica em português:
 | Lista de repositórios vazia | Mensagem "Nenhum repositório encontrado". |
 | Erro de renderização / rota | Tela de erro com botão de retorno, preservando o layout. |
 
-## Demo
+---
 
-URL da demo: _a ser adicionada após o deploy_.
+## 🔄 CI/CD
+
+Pipeline em **GitHub Actions** (`.github/workflows/ci.yml`), disparado em
+`push` e `pull_request` para a `main`:
+
+- **`quality`** — `npm ci` → `lint` → `typecheck` → `test` → `build`. Qualquer
+  falha reprova a PR.
+- **`deploy`** — depende do `quality` verde e roda apenas em `push` na `main`;
+  publica o build no Netlify via `netlify-cli`. PRs (inclusive de forks) rodam
+  só o `quality`, sem acesso aos secrets.
+
+A `main` é protegida por _branch protection rule_: push direto bloqueado,
+_pull request_ obrigatória com revisão de _Code Owner_ e status check do CI
+verde antes do _merge_.
+
+---
+
+## 🌐 Demo
+
+**[https://github-explorer-pedrohribeiross.netlify.app](https://github-explorer-pedrohribeiross.netlify.app)**
+
+Publicada automaticamente pelo GitHub Actions a cada `push` na `main` que
+passe no CI.
