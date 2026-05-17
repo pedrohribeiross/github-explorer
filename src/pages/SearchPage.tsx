@@ -46,7 +46,7 @@ export const SearchPage = () => {
       </h1>
       <p className="text-secondary mb-4">Busque e explore perfis do GitHub</p>
 
-      <div className="w-100 col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+      <div className="w-100 app-search-block">
         <div className="app-surface app-shadow border rounded-4 p-4 text-start">
           <form onSubmit={handleSubmit} noValidate>
             <div className="mb-3">
@@ -57,7 +57,9 @@ export const SearchPage = () => {
                 id={inputId}
                 type="text"
                 className={
-                  error ? 'form-control form-control-lg is-invalid' : 'form-control form-control-lg'
+                  error
+                    ? 'form-control form-control-lg app-search-input is-invalid'
+                    : 'form-control form-control-lg app-search-input'
                 }
                 placeholder="Digite o username do GitHub"
                 value={inputValue}

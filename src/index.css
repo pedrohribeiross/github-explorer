@@ -143,6 +143,18 @@ body {
   }
 }
 
+/* SearchPage form block width cap (R22/M-D3). Mobile-first: base is fluid
+   (w-100, no cap) so it never overflows 360px; from sm (>=576px) it caps at
+   28rem = 448px (STYLE_GUIDE §116 max-w-md; 448 = 56 * 8px grid) and centers,
+   keeping the card compact and close to the title on desktop. Max-width only,
+   no fixed width. */
+@media (min-width: 576px) {
+  .app-search-block {
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+}
+
 /* SearchPage example links (R23/M-D4): no underline at rest, lighter accent
    (--bs-link-hover-color = blue-300) + underline on hover/focus. Cosmetic
    only, layout-neutral. */
@@ -160,7 +172,16 @@ body {
    input height so the button never exceeds the input. Height only, no fixed
    width — stays w-100 and layout-neutral, mobile-first. */
 .app-search-cta {
+  height: 2.75rem;
+}
+
+/* SearchPage input: fixed 48px height (SITEMAP §1 line 145) and 16px font
+   (R24/M-D5). .form-control-lg ships a taller box + 1.25rem font; this pins
+   height/size to the spec. Height is bounded (48px) and the field stays
+   w-100/fluid in width, so it is layout-neutral and never overflows 360px. */
+.app-search-input {
   height: 3rem;
+  font-size: 1rem;
 }
 
 /* Perfect-square icon badge for repository stats (R30). Mobile-first:
