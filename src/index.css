@@ -143,6 +143,43 @@ body {
   }
 }
 
+/* SearchPage example links (R23/M-D4): no underline at rest, lighter accent
+   (--bs-link-hover-color = blue-300) + underline on hover/focus. Cosmetic
+   only, layout-neutral. */
+.app-example-link {
+  text-decoration: none;
+}
+
+.app-example-link:hover,
+.app-example-link:focus-visible {
+  color: var(--bs-link-hover-color) !important;
+  text-decoration: underline;
+}
+
+/* SearchPage CTA height pinned to 48px (R24/M-D5): matches the .form-control-lg
+   input height so the button never exceeds the input. Height only, no fixed
+   width — stays w-100 and layout-neutral, mobile-first. */
+.app-search-cta {
+  height: 3rem;
+}
+
+/* Perfect-square icon badge for repository stats (R30). Mobile-first:
+   smaller on the base viewport so 2-col stats never crowd 360px, growing
+   on md+. Fixed size is intentional and bounded (well under the ~328px
+   usable width at 360px even at 2 columns), per §5.1. Layout: equal
+   width/height = perfect square; flex children must not stretch it. */
+.app-stat-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .app-stat-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
 /* Bootstrap .display-1 font-size from the md breakpoint up (>=768px).
    Mobile-first: base stays at .display-2 so the 404 never overflows 360px,
    scaling up on md+ (R14/§6.5). Bootstrap has no responsive display-* . */
