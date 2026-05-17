@@ -4,8 +4,12 @@ interface LoadingSpinnerProps {
 
 export const LoadingSpinner = ({ label = 'Carregando…' }: LoadingSpinnerProps) => {
   return (
-    <div className="d-flex justify-content-center py-5" role="status">
-      <div className="spinner-border text-primary" aria-hidden="true" />
+    <div className="d-flex justify-content-center w-100 py-5" role="status">
+      <div
+        className="spinner-border text-primary"
+        style={{ width: '3rem', height: '3rem', borderWidth: '0.25rem' }}
+        aria-hidden="true"
+      />
       <span className="visually-hidden">{label}</span>
     </div>
   )
