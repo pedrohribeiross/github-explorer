@@ -6,32 +6,59 @@ interface UserCardProps {
 
 export const UserCard = ({ user }: UserCardProps) => {
   return (
-    <article className="card">
-      <div className="card-body">
-        <div className="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-3">
+    <article className="card app-surface app-shadow border rounded-4">
+      <div className="card-body p-3 p-md-4">
+        <div className="d-flex flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start gap-4">
           <img
             src={user.avatarUrl}
             alt={`Avatar de ${user.name ?? user.login}`}
-            className="rounded-circle"
-            width={96}
-            height={96}
+            className="rounded-circle border border-4 border-primary flex-shrink-0 shadow"
+            width={128}
+            height={128}
           />
-          <div className="text-center text-sm-start">
-            <h2 className="h5 mb-1">{user.name ?? user.login}</h2>
-            <p className="text-muted mb-2">@{user.login}</p>
-            {user.bio && <p className="mb-2">{user.bio}</p>}
+          <div className="flex-grow-1">
+            <h2 className="h3 fw-bold mb-1">{user.name ?? user.login}</h2>
+            <p className="text-tertiary mb-3">@{user.login}</p>
+            {user.bio && <p className="text-secondary mb-3">{user.bio}</p>}
             {user.email && (
-              <p className="mb-2">
-                <a href={`mailto:${user.email}`}>{user.email}</a>
+              <p className="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-0">
+                <i className="bi bi-envelope" aria-hidden="true" />
+                <a href={`mailto:${user.email}`} className="text-decoration-none">
+                  {user.email}
+                </a>
               </p>
             )}
-            <div className="d-flex justify-content-center justify-content-sm-start gap-3">
-              <span>
-                <strong>{user.followers}</strong> seguidores
-              </span>
-              <span>
-                <strong>{user.following}</strong> seguindo
-              </span>
+          </div>
+        </div>
+
+        <hr className="my-4 border-secondary" />
+
+        <div className="row row-cols-2 row-cols-md-3 g-3 text-center text-md-start">
+          <div className="col">
+            <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <i className="bi bi-people fs-4 text-primary" aria-hidden="true" />
+              <div>
+                <div className="fs-4 fw-bold lh-1">{user.followers}</div>
+                <div className="small text-tertiary">Seguidores</div>
+              </div>
+            </div>
+          </div>
+          <div className="col">
+            <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <i className="bi bi-person-plus fs-4 text-primary" aria-hidden="true" />
+              <div>
+                <div className="fs-4 fw-bold lh-1">{user.following}</div>
+                <div className="small text-tertiary">Seguindo</div>
+              </div>
+            </div>
+          </div>
+          <div className="col">
+            <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
+              <i className="bi bi-archive fs-4 text-primary" aria-hidden="true" />
+              <div>
+                <div className="fs-4 fw-bold lh-1">{user.publicRepos}</div>
+                <div className="small text-tertiary">Repositórios</div>
+              </div>
             </div>
           </div>
         </div>
