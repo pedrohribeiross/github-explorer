@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { AsyncSection, RepositoryList, SortSelector, UserCard } from '../components'
+import { AsyncSection, Breadcrumb, RepositoryList, SortSelector, UserCard } from '../components'
 import { useSearchContext } from '../context'
 import { useRepositories, useUser } from '../hooks'
+import { ROUTE_PATHS } from '../routes'
 import { sortRepositories } from '../utils'
 
 export const UserProfilePage = () => {
@@ -27,19 +28,23 @@ export const UserProfilePage = () => {
         Perfil de {username}
       </h2>
 
+      <Breadcrumb items={[{ label: 'Busca', to: ROUTE_PATHS.search }, { label: `@${username}` }]} />
+
       <AsyncSection state={user} notFoundMessage="Usuário não encontrado">
         {(loadedUser) => <UserCard user={loadedUser} />}
       </AsyncSection>
 
-      <div>
-        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
-          <h3 className="h5 mb-0">Repositórios</h3>
-          <SortSelector value={sortOption} onChange={setSortOption} />
-        </div>
+      <div className="card app-surface app-shadow border rounded-4">
+        <div className="card-body p-3 p-md-4">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <h3 className="h5 mb-0">Repositórios</h3>
+            <SortSelector value={sortOption} onChange={setSortOption} />
+          </div>
 
-        <AsyncSection state={repositories} notFoundMessage="Usuário não encontrado">
-          {() => <RepositoryList username={username} repositories={sortedRepositories} />}
-        </AsyncSection>
+          <AsyncSection state={repositories} notFoundMessage="Usuário não encontrado">
+            {() => <RepositoryList username={username} repositories={sortedRepositories} />}
+          </AsyncSection>
+        </div>
       </div>
     </section>
   )
