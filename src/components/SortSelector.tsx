@@ -6,7 +6,7 @@ const sortOptionLabels: Record<SortOption, string> = {
   [SORT_OPTIONS.starsDesc]: 'Mais estrelas',
   [SORT_OPTIONS.starsAsc]: 'Menos estrelas',
   [SORT_OPTIONS.nameAsc]: 'Nome (A–Z)',
-  [SORT_OPTIONS.nameDesc]: 'Nome (Z-A)',
+  [SORT_OPTIONS.nameDesc]: 'Nome (Z–A)',
   [SORT_OPTIONS.recent]: 'Mais recentes',
 }
 
