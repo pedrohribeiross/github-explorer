@@ -46,17 +46,19 @@ export const SearchPage = () => {
       </h1>
       <p className="text-secondary mb-4">Busque e explore perfis do GitHub</p>
 
-      <div className="w-100 col-12 col-sm-10 col-md-8 col-lg-6">
+      <div className="w-100 col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
         <div className="app-surface app-shadow border rounded-4 p-4 text-start">
           <form onSubmit={handleSubmit} noValidate>
             <div className="mb-3">
-              <label htmlFor={inputId} className="form-label fw-medium">
+              <label htmlFor={inputId} className="form-label fw-medium small">
                 Nome de usuário
               </label>
               <input
                 id={inputId}
                 type="text"
-                className={error ? 'form-control is-invalid' : 'form-control'}
+                className={
+                  error ? 'form-control form-control-lg is-invalid' : 'form-control form-control-lg'
+                }
                 placeholder="Digite o username do GitHub"
                 value={inputValue}
                 onChange={(event) => setInputValue(event.target.value)}
@@ -70,20 +72,23 @@ export const SearchPage = () => {
               )}
             </div>
 
-            <button type="submit" className="btn app-btn-gradient app-shadow-accent w-100">
+            <button
+              type="submit"
+              className="btn app-btn-gradient app-shadow-accent app-search-cta w-100 d-flex align-items-center justify-content-center"
+            >
               <i className="bi bi-search me-2" aria-hidden="true" />
               Buscar usuário
             </button>
           </form>
         </div>
 
-        <p className="d-flex flex-wrap align-items-center gap-2 mt-3 mb-0 small text-secondary">
+        <p className="d-flex flex-wrap align-items-center justify-content-center gap-1 mt-3 mb-0 small text-secondary">
           <span>Exemplos:</span>
           {exampleUsernames.map((example) => (
             <button
               key={example}
               type="button"
-              className="btn btn-link p-0 px-1 py-2 text-decoration-none link-primary"
+              className="btn btn-link p-0 px-1 py-2 link-primary app-example-link"
               onClick={() => {
                 setInputValue(example)
                 setError(null)
