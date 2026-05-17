@@ -110,3 +110,17 @@ body {
 .app-min-w-0 {
   min-width: 0;
 }
+
+/* Repository list card: blue border + soft blue shadow on hover/focus
+   (SITEMAP §2 lines 362-365). Cosmetic and layout-neutral. */
+.app-repo-card {
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.app-repo-card:hover,
+.app-repo-card:focus-visible {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 0.5rem 1.5rem rgba(59, 130, 246, 0.1);
+}
