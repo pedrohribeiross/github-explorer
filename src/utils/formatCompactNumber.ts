@@ -1,5 +1,4 @@
-const truncateToOneDecimal = (value: number): number =>
-  Math.floor(value * 10) / 10
+const truncateToOneDecimal = (value: number): number => Math.floor(value * 10) / 10
 
 const formatScaled = (value: number, suffix: string): string => {
   const scaled = truncateToOneDecimal(value)
