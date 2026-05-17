@@ -18,6 +18,7 @@ const user: User = {
   email: 'octocat@github.com',
   followers: 100,
   following: 10,
+  publicRepos: 8,
 }
 
 describe('useUser', () => {

@@ -16,6 +16,7 @@ const userResponse: GitHubUserResponse = {
   email: 'octocat@github.com',
   followers: 100,
   following: 10,
+  public_repos: 8,
 }
 
 const repositoryResponse: GitHubRepositoryResponse = {
@@ -52,6 +53,7 @@ describe('githubService', () => {
         email: 'octocat@github.com',
         followers: 100,
         following: 10,
+        publicRepos: 8,
       })
     })
 
