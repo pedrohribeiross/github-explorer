@@ -55,3 +55,41 @@ body {
   color: #64748b;
   opacity: 1;
 }
+
+/* --------------------------------------------------------------------------
+   App state variables (ESPECIFICACAO §4 — statistic badge colors + accents)
+   Own tokens, app- prefixed, no Bootstrap collision. No glassmorphism (D5).
+   -------------------------------------------------------------------------- */
+[data-bs-theme='dark'] {
+  --app-stars: #facc15;
+  --app-forks: #60a5fa;
+  --app-watchers: #4ade80;
+  --app-issues: #f87171;
+  --app-accent: #3b82f6;
+  --app-surface: #0f172a;
+}
+
+/* --------------------------------------------------------------------------
+   App utility classes (ESPECIFICACAO §4 — effects with no Bootstrap analog)
+   Purely cosmetic and layout-neutral: no width/min-width (R04b/§5.4).
+   -------------------------------------------------------------------------- */
+.app-btn-gradient {
+  background-image: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  border-color: #3b82f6;
+  color: #ffffff;
+}
+
+.app-btn-gradient:hover,
+.app-btn-gradient:focus {
+  background-image: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.app-shadow {
+  box-shadow: 0 1.5rem 3rem rgba(2, 6, 23, 0.6);
+}
+
+.app-shadow-accent {
+  box-shadow: 0 0.75rem 2rem rgba(59, 130, 246, 0.3);
+}
