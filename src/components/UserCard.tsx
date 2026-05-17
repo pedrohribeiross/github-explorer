@@ -1,4 +1,5 @@
 import type { User } from '../domain'
+import { formatCompactNumber } from '../utils'
 
 interface UserCardProps {
   user: User
@@ -38,7 +39,9 @@ export const UserCard = ({ user }: UserCardProps) => {
             <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
               <i className="bi bi-people fs-4 text-primary" aria-hidden="true" />
               <div>
-                <div className="fs-4 fw-bold lh-1">{user.followers}</div>
+                <div className="fs-4 fw-bold lh-1" aria-label={`${user.followers} seguidores`}>
+                  {formatCompactNumber(user.followers)}
+                </div>
                 <div className="small text-tertiary">Seguidores</div>
               </div>
             </div>
@@ -47,16 +50,23 @@ export const UserCard = ({ user }: UserCardProps) => {
             <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
               <i className="bi bi-person-plus fs-4 text-primary" aria-hidden="true" />
               <div>
-                <div className="fs-4 fw-bold lh-1">{user.following}</div>
+                <div className="fs-4 fw-bold lh-1" aria-label={`${user.following} seguindo`}>
+                  {formatCompactNumber(user.following)}
+                </div>
                 <div className="small text-tertiary">Seguindo</div>
               </div>
             </div>
           </div>
           <div className="col">
             <div className="d-flex align-items-center justify-content-center justify-content-md-start gap-3">
-              <i className="bi bi-archive fs-4 text-primary" aria-hidden="true" />
+              <i className="bi bi-diagram-2 fs-4 text-primary" aria-hidden="true" />
               <div>
-                <div className="fs-4 fw-bold lh-1">{user.publicRepos}</div>
+                <div
+                  className="fs-4 fw-bold lh-1"
+                  aria-label={`${user.publicRepos} repositórios`}
+                >
+                  {formatCompactNumber(user.publicRepos)}
+                </div>
                 <div className="small text-tertiary">Repositórios</div>
               </div>
             </div>
