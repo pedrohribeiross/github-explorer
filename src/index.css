@@ -102,3 +102,11 @@ body {
 .app-surface {
   background-color: var(--app-surface);
 }
+
+/* Anti-overflow helper: lets a flex child shrink below its content size so
+   text-break/text-truncate can contain long repo names/descriptions on the
+   smallest target viewport (R04b/§5.1/§5.4). Not cosmetic — enables shrink,
+   never imposes a fixed width. Bootstrap 5.3 has no min-w-0 equivalent. */
+.app-min-w-0 {
+  min-width: 0;
+}
