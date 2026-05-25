@@ -1,6 +1,6 @@
 export type { GitHubUserResponse } from './GitHubUserResponse'
 export type { GitHubRepositoryResponse } from './GitHubRepositoryResponse'
 export type { SearchContextValue } from './SearchContextValue'
-export type { AsyncState } from './AsyncState'
+export type { FetchState } from './FetchState'
 export type { ApiErrorInfo, ApiErrorKind } from './ApiErrorInfo'
 export type { BreadcrumbItem } from './BreadcrumbItem'
