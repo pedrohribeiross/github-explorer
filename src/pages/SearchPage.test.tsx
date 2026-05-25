@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom'
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom'
-import { SearchProvider } from '../context'
 import { ROUTE_PATHS } from '../routes'
 import { SearchPage } from './SearchPage'
 
@@ -22,14 +22,12 @@ const profileTextFor = (username: string) => (_: string, element: Element | null
 
 const renderSearchPage = () => {
   render(
-    <SearchProvider>
-      <MemoryRouter initialEntries={[ROUTE_PATHS.search]}>
-        <Routes>
-          <Route path={ROUTE_PATHS.search} element={<SearchPage />} />
-          <Route path={ROUTE_PATHS.userProfile} element={<UserProfileStub />} />
-        </Routes>
-      </MemoryRouter>
-    </SearchProvider>,
+    <MemoryRouter initialEntries={[ROUTE_PATHS.search]}>
+      <Routes>
+        <Route path={ROUTE_PATHS.search} element={<SearchPage />} />
+        <Route path={ROUTE_PATHS.userProfile} element={<UserProfileStub />} />
+      </Routes>
+    </MemoryRouter>,
   )
 }
 

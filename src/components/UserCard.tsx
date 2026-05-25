@@ -20,15 +20,19 @@ export const UserCard = ({ user }: UserCardProps) => {
           <div className="flex-grow-1">
             <h2 className="h3 fw-bold mb-1">{user.name ?? user.login}</h2>
             <p className="text-tertiary mb-3">@{user.login}</p>
-            {user.bio && <p className="text-secondary mb-3">{user.bio}</p>}
-            {user.email && (
-              <p className="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-0">
-                <i className="bi bi-envelope" aria-hidden="true" />
+            <p className="text-secondary mb-3">
+              {user.bio ?? <span className="text-tertiary fst-italic">Sem bio</span>}
+            </p>
+            <p className="d-flex align-items-center justify-content-center justify-content-md-start gap-2 text-secondary mb-0">
+              <i className="bi bi-envelope" aria-hidden="true" />
+              {user.email ? (
                 <a href={`mailto:${user.email}`} className="text-decoration-none">
                   {user.email}
                 </a>
-              </p>
-            )}
+              ) : (
+                <span className="text-tertiary fst-italic">E-mail não público</span>
+              )}
+            </p>
           </div>
         </div>
 

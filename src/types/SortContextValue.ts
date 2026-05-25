@@ -1,8 +1,6 @@
 import type { SortOption } from '../domain'
 
-export interface SearchContextValue {
-  username: string
+export interface SortContextValue {
   sortOption: SortOption
-  setUsername: (username: string) => void
   setSortOption: (sortOption: SortOption) => void
 }

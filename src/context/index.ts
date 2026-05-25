@@ -1,2 +1,2 @@
-export { SearchProvider } from './SearchProvider'
-export { useSearchContext } from './useSearchContext'
+export { SortProvider } from './SortProvider'
+export { useSortContext } from './useSortContext'
