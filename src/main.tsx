@@ -4,13 +4,13 @@ import { RouterProvider } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import './index.css'
-import { SearchProvider } from './context'
+import { SortProvider } from './context'
 import { appRouter } from './routes'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SearchProvider>
+    <SortProvider>
       <RouterProvider router={appRouter} />
-    </SearchProvider>
+    </SortProvider>
   </StrictMode>,
 )

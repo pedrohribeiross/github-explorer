@@ -1,18 +1,14 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { AsyncSection, Breadcrumb, RepositoryList, SortSelector, UserCard } from '../components'
-import { useSearchContext } from '../context'
+import { useSortContext } from '../context'
 import { useRepositories, useUser } from '../hooks'
 import { ROUTE_PATHS } from '../routes'
 import { sortRepositories } from '../utils'
 
 export const UserProfilePage = () => {
   const { username = '' } = useParams<'username'>()
-  const { sortOption, setSortOption, setUsername } = useSearchContext()
-
-  useEffect(() => {
-    setUsername(username)
-  }, [username, setUsername])
+  const { sortOption, setSortOption } = useSortContext()
 
   const user = useUser(username)
   const repositories = useRepositories(username)

@@ -1,14 +1,12 @@
 import { useId, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSearchContext } from '../context'
 import { buildUserProfilePath } from '../routes'
 import { isValidUsername } from '../utils'
 
 export const SearchPage = () => {
   const inputId = useId()
   const navigate = useNavigate()
-  const { setUsername } = useSearchContext()
   const [inputValue, setInputValue] = useState('')
   const [error, setError] = useState<string | null>(null)
 
@@ -24,7 +22,6 @@ export const SearchPage = () => {
     }
 
     setError(null)
-    setUsername(trimmed)
     navigate(buildUserProfilePath(trimmed))
   }
 
