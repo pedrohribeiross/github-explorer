@@ -45,8 +45,7 @@ describe('RepositoryDetailPage', () => {
 
     await waitFor(() =>
       expect(mockedGetRepository).toHaveBeenCalledWith(
-        'octocat',
-        'hello-world',
+        'octocat/hello-world',
         expect.any(AbortSignal),
       ),
     )
