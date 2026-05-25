@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom'
+import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import { AxiosError } from 'axios'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import type { Repository } from '../domain'
 import { getRepository } from '../services'
 import { ROUTE_PATHS, buildRepositoryDetailPath } from '../routes'
-import { createQueryClientWrapper } from '../test/renderWithQueryClient'
 import { RepositoryDetailPage } from './RepositoryDetailPage'
 
 jest.mock('../services', () => ({
@@ -28,19 +28,14 @@ const repository: Repository = {
   updatedAt: '2024-06-01T00:00:00Z',
 }
 
-const renderDetailPage = () => {
-  const Wrapper = createQueryClientWrapper()
-
-  return render(
-    <Wrapper>
-      <MemoryRouter initialEntries={[buildRepositoryDetailPath('octocat', 'hello-world')]}>
-        <Routes>
-          <Route path={ROUTE_PATHS.repositoryDetail} element={<RepositoryDetailPage />} />
-        </Routes>
-      </MemoryRouter>
-    </Wrapper>,
+const renderDetailPage = () =>
+  render(
+    <MemoryRouter initialEntries={[buildRepositoryDetailPath('octocat', 'hello-world')]}>
+      <Routes>
+        <Route path={ROUTE_PATHS.repositoryDetail} element={<RepositoryDetailPage />} />
+      </Routes>
+    </MemoryRouter>,
   )
-}
 
 describe('RepositoryDetailPage', () => {
   it('requests the repository using the route params', async () => {
@@ -48,7 +43,13 @@ describe('RepositoryDetailPage', () => {
 
     renderDetailPage()
 
-    await waitFor(() => expect(mockedGetRepository).toHaveBeenCalledWith('octocat', 'hello-world'))
+    await waitFor(() =>
+      expect(mockedGetRepository).toHaveBeenCalledWith(
+        'octocat',
+        'hello-world',
+        expect.any(AbortSignal),
+      ),
+    )
   })
 
   it('renders the repository data on success', async () => {
