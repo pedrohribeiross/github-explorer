@@ -7,7 +7,7 @@ const config: Config = {
   testMatch: ['**/*.test.ts', '**/*.test.tsx'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(png|jpg|jpeg|gif|svg|webp)$': '<rootDir>/src/test/fileMock.ts',
+    '\\.(png|jpg|jpeg|gif|svg|webp)$': '<rootDir>/src/test-utils/fileMock.ts',
   },
   transform: {
     '^.+\\.(t|j)sx?$': [
