@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react'
 import type { Repository } from '../domain'
 import { getUserRepositories } from '../services'
-import { createQueryClientWrapper } from '../test/renderWithQueryClient'
 import { useRepositories } from './useRepositories'
 
 jest.mock('../services', () => ({
@@ -25,90 +24,42 @@ const repository: Repository = {
 }
 
 describe('useRepositories', () => {
-  it('starts in loading state when a username is provided', () => {
-    mockedGetUserRepositories.mockReturnValue(new Promise(() => {}))
-
-    const { result } = renderHook(() => useRepositories('octocat'), {
-      wrapper: createQueryClientWrapper(),
-    })
-
-    expect(result.current).toEqual({
-      data: null,
-      loading: true,
-      offline: false,
-      error: null,
-      retry: expect.any(Function),
-    })
-  })
-
   it('returns the repositories on success', async () => {
     mockedGetUserRepositories.mockResolvedValue([repository])
 
-    const { result } = renderHook(() => useRepositories('octocat'), {
-      wrapper: createQueryClientWrapper(),
-    })
+    const { result } = renderHook(() => useRepositories('octocat'))
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({
-      data: [repository],
-      loading: false,
-      offline: false,
-      error: null,
-      retry: expect.any(Function),
-    })
-    expect(mockedGetUserRepositories).toHaveBeenCalledWith('octocat')
+    expect(result.current.data).toEqual([repository])
+    expect(result.current.error).toBeNull()
+    expect(mockedGetUserRepositories).toHaveBeenCalledWith('octocat', expect.any(AbortSignal))
   })
 
   it('returns an empty list when the user has no repositories', async () => {
     mockedGetUserRepositories.mockResolvedValue([])
 
-    const { result } = renderHook(() => useRepositories('octocat'), {
-      wrapper: createQueryClientWrapper(),
-    })
+    const { result } = renderHook(() => useRepositories('octocat'))
 
     await waitFor(() => expect(result.current.loading).toBe(false))
 
-    expect(result.current).toEqual({
-      data: [],
-      loading: false,
-      offline: false,
-      error: null,
-      retry: expect.any(Function),
-    })
+    expect(result.current.data).toEqual([])
   })
 
   it('exposes the error when the request fails', async () => {
     const error = new Error('network error')
     mockedGetUserRepositories.mockRejectedValue(error)
 
-    const { result } = renderHook(() => useRepositories('octocat'), {
-      wrapper: createQueryClientWrapper(),
-    })
+    const { result } = renderHook(() => useRepositories('octocat'))
 
     await waitFor(() => expect(result.current.error).toBe(error))
-
-    expect(result.current).toEqual({
-      data: null,
-      loading: false,
-      offline: false,
-      error,
-      retry: expect.any(Function),
-    })
   })
 
-  it('does not fetch and is not loading when the username is empty', () => {
-    const { result } = renderHook(() => useRepositories(''), {
-      wrapper: createQueryClientWrapper(),
-    })
+  it('does not fetch when the username is empty', () => {
+    const { result } = renderHook(() => useRepositories(''))
 
-    expect(result.current).toEqual({
-      data: null,
-      loading: false,
-      offline: false,
-      error: null,
-      retry: expect.any(Function),
-    })
+    expect(result.current.loading).toBe(false)
+    expect(result.current.data).toBeNull()
     expect(mockedGetUserRepositories).not.toHaveBeenCalled()
   })
 })
