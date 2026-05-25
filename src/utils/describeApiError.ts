@@ -5,9 +5,6 @@ interface DescribeApiErrorOptions {
   notFoundMessage: string
 }
 
-const isRateLimited = (status: number, remaining: string | undefined): boolean =>
-  status === 403 && remaining === '0'
-
 export const describeApiError = (error: Error, options: DescribeApiErrorOptions): ApiErrorInfo => {
   if (isAxiosError(error)) {
     const status = error.response?.status
@@ -20,10 +17,7 @@ export const describeApiError = (error: Error, options: DescribeApiErrorOptions)
       }
     }
 
-    if (
-      status !== undefined &&
-      isRateLimited(status, error.response?.headers['x-ratelimit-remaining'])
-    ) {
+    if (status === 403) {
       return {
         kind: 'rateLimit',
         message:
