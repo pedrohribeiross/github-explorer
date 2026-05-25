@@ -112,10 +112,10 @@ describe('githubService', () => {
   })
 
   describe('getRepository', () => {
-    it('requests the repository endpoint with owner and repo', async () => {
+    it('requests the repository endpoint with the full name', async () => {
       mockedGet.mockResolvedValue({ data: repositoryResponse })
 
-      await getRepository('octocat', 'hello-world')
+      await getRepository('octocat/hello-world')
 
       expect(mockedGet).toHaveBeenCalledWith('/repos/octocat/hello-world', { signal: undefined })
     })
@@ -123,7 +123,7 @@ describe('githubService', () => {
     it('maps the API response to the domain Repository shape', async () => {
       mockedGet.mockResolvedValue({ data: repositoryResponse })
 
-      const result = await getRepository('octocat', 'hello-world')
+      const result = await getRepository('octocat/hello-world')
 
       expect(result).toEqual({
         id: 42,

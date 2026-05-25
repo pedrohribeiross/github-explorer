@@ -32,11 +32,7 @@ describe('useRepository', () => {
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     expect(result.current.data).toEqual(repository)
-    expect(mockedGetRepository).toHaveBeenCalledWith(
-      'octocat',
-      'hello-world',
-      expect.any(AbortSignal),
-    )
+    expect(mockedGetRepository).toHaveBeenCalledWith('octocat/hello-world', expect.any(AbortSignal))
   })
 
   it('exposes the error when the request fails', async () => {
