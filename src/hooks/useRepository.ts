@@ -1,20 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '../api'
-import type { Repository } from '../domain'
+import { useCallback } from 'react'
 import { getRepository } from '../services'
-import type { AsyncState } from '../types'
-import { toAsyncState } from './toAsyncState'
+import { useFetch } from './useFetch'
 
-export const useRepository = (owner: string, repo: string): AsyncState<Repository> => {
+export const useRepository = (owner: string, repo: string) => {
   const trimmedOwner = owner.trim()
   const trimmedRepo = repo.trim()
   const enabled = trimmedOwner.length > 0 && trimmedRepo.length > 0
-
-  const query = useQuery({
-    queryKey: queryKeys.repository(trimmedOwner, trimmedRepo),
-    queryFn: () => getRepository(trimmedOwner, trimmedRepo),
-    enabled,
-  })
-
-  return toAsyncState(query, enabled)
+  const fetcher = useCallback(
+    (signal: AbortSignal) => getRepository(trimmedOwner, trimmedRepo, signal),
+    [trimmedOwner, trimmedRepo],
+  )
+  return useFetch(fetcher, enabled)
 }

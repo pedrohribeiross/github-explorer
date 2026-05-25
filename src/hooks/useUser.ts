@@ -1,19 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { queryKeys } from '../api'
-import type { User } from '../domain'
+import { useCallback } from 'react'
 import { getUser } from '../services'
-import type { AsyncState } from '../types'
-import { toAsyncState } from './toAsyncState'
+import { useFetch } from './useFetch'
 
-export const useUser = (username: string): AsyncState<User> => {
-  const trimmedUsername = username.trim()
-  const enabled = trimmedUsername.length > 0
-
-  const query = useQuery({
-    queryKey: queryKeys.user(trimmedUsername),
-    queryFn: () => getUser(trimmedUsername),
-    enabled,
-  })
-
-  return toAsyncState(query, enabled)
+export const useUser = (username: string) => {
+  const trimmed = username.trim()
+  const fetcher = useCallback((signal: AbortSignal) => getUser(trimmed, signal), [trimmed])
+  return useFetch(fetcher, trimmed.length > 0)
 }
