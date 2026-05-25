@@ -42,9 +42,8 @@ Aplicação web _client-side_ que consome a API pública do GitHub — sem back-
   de seguidos.
 - **Listagem de repositórios** — todos os repositórios públicos do usuário,
   ordenados por estrelas em ordem decrescente por padrão.
-- **Reordenação da listagem** — alterne entre cinco critérios: estrelas
-  (decrescente/crescente), nome (A–Z / Z–A) e mais recentes (data de
-  atualização).
+- **Reordenação da listagem** — alterne entre três critérios: mais
+  estrelas, menos estrelas e mais recentes (data de atualização).
 - **Detalhe do repositório** — página própria com nome, descrição, número de
   estrelas, linguagem e link externo para o repositório no GitHub.
 - **Navegação por rotas** — fluxo busca → perfil → detalhe, com URLs
@@ -60,19 +59,23 @@ A aplicação consome três endpoints da API do GitHub, sem autenticação:
 | --- | --- |
 | Detalhes do usuário | `GET /users/{username}` |
 | Repositórios do usuário | `GET /users/{username}/repos?per_page=100` |
-| Detalhes do repositório | `GET /repos/{owner}/{repo}` |
+| Detalhes do repositório | `GET /repos/{full_name}` |
 
 A ordenação por estrelas é feita **no cliente**, não pela API. O endpoint de
 repositórios é buscado com `per_page=100` e a ordenação é aplicada no
 navegador por uma função pura que não muta o array original, permitindo trocar
 o critério de ordenação sem nova requisição à rede.
 
-As respostas da API são cacheadas pelo React Query com `staleTime` de 5
-minutos e deduplicação automática, evitando requisições redundantes — relevante
-porque o limite não autenticado da API do GitHub é de **60 requisições por
-hora**. O `retry` é seletivo: erros 4xx (usuário inexistente, rate limit) não
-são repetidos, pois não há chance de sucesso; falhas de rede e 5xx têm uma
-tentativa adicional.
+As requisições são feitas via um hook genérico `useFetch` que encapsula
+`loading` / `error` / `data` e cancela a requisição em voo via
+`AbortController` quando o componente desmonta ou as dependências mudam — o
+`signal` é propagado até o Axios, então uma navegação rápida entre rotas
+aborta a request anterior no nível da rede em vez de só descartar o
+resultado. Em caso de erro, o usuário pode disparar manualmente uma nova
+tentativa pelo botão "Tentar novamente" exibido junto da mensagem. Não há
+cache entre rotas: cada montagem refaz a busca — adequado para o escopo do
+desafio, dado o limite não autenticado da API do GitHub de **60 requisições
+por hora**.
 
 ---
 
@@ -87,13 +90,13 @@ pages / components  →  hooks  →  services  →  api (cliente Axios)
 
 ```
 src/
-  api/         Cliente Axios, QueryClient e builders de chave de query
+  api/         Cliente Axios (githubClient)
   services/    Funções de acesso a dados (githubService)
   domain/      Modelos de domínio (User, Repository, SortOption)
-  types/       Interfaces de resposta da API (uma por arquivo)
+  types/       Interfaces de resposta da API e contratos de hooks (uma por arquivo)
   mappers/     Transformações API → domínio (uma por arquivo)
-  hooks/       Hooks de dados (useUser, useRepositories, useRepository)
-  context/     SearchContext — estado de cliente compartilhado
+  hooks/       useFetch genérico + hooks de dados (useUser, useRepositories, useRepository)
+  context/     SortContext — critério de ordenação compartilhado
   components/  Componentes de UI reutilizáveis
   pages/       Páginas mapeadas para rotas
   routes/      Definição das rotas
@@ -102,16 +105,18 @@ src/
 
 **Princípios aplicados:**
 
-- **Separação de responsabilidades** — o React Query vive dentro da camada
-  `hooks/`; os componentes não conhecem a biblioteca, consumindo apenas um
-  contrato `loading` / `error` / `data`.
+- **Separação de responsabilidades** — a busca de dados vive na camada
+  `hooks/` via um `useFetch` genérico; os componentes consomem apenas um
+  contrato `loading` / `error` / `data` / `retry` e não conhecem o Axios.
 - **Tipos e funções separados** — declarações de tipo e funções nunca
   coexistem no mesmo arquivo; tipos ficam em `types/`, transformações em
   `mappers/`, cada um com responsabilidade única.
-- **Estado de cliente vs. servidor** — `SearchContext` guarda apenas o
-  _username_ atual e o critério de ordenação; o estado de servidor (respostas
-  cacheáveis da API) é responsabilidade exclusiva do React Query. Sem store
-  global.
+- **Estado de cliente leve** — `SortContext` guarda apenas o critério de
+  ordenação atual; o _username_ vive na URL (`useParams`). Sem store global
+  nem cache cross-route — cada montagem refaz a busca.
+- **Cancelamento real** — o `useFetch` cria um `AbortController` e propaga o
+  `signal` até o Axios, garantindo que requisições obsoletas sejam abortadas
+  na rede quando o componente desmonta ou as dependências mudam.
 - **Código autoexplicativo** — sem comentários; nomenclatura descritiva em
   inglês. Todo texto exibido ao usuário final é em português (pt-BR).
 
@@ -137,7 +142,7 @@ src/
 | HTTP client | Axios |
 | Estilo / responsividade | Bootstrap 5 + Bootstrap Icons |
 | Estado de cliente | React Context API |
-| Estado de servidor | TanStack React Query v5 |
+| Busca de dados | `useFetch` próprio com `AbortController` |
 | Testes | Jest + React Testing Library |
 | Lint / Format | ESLint + Prettier |
 | CI/CD | GitHub Actions + Netlify |
@@ -188,10 +193,6 @@ O Vite imprime a URL local no terminal (por padrão
 `http://localhost:5173`). A aplicação já consome a API pública do GitHub sem
 configuração adicional — não há variáveis de ambiente nem chaves a definir.
 
-Em modo de desenvolvimento, os React Query Devtools ficam disponíveis no canto
-da tela para inspeção do cache e do estado das requisições; eles não são
-incluídos no build de produção.
-
 **Build de produção:**
 
 ```bash
@@ -211,12 +212,13 @@ qualquer host de arquivos estáticos.
 npm test
 ```
 
-A suíte é organizada por camada:
+A suíte é organizada por camada, com os testes co-localizados ao lado dos
+arquivos testados:
 
 - **Services** — mock do Axios, validando chamadas e _parsing_ das respostas.
 - **Utils** — ordenação e formatação testadas com casos puros.
-- **Hooks** — estados de loading, erro e sucesso, renderizados com um
-  `QueryClientProvider` isolado por teste.
+- **Hooks** — `useFetch` testado isoladamente cobrindo loading, sucesso,
+  erro, retry, `enabled=false` e cancelamento via `AbortController`.
 - **Componentes-chave** — busca, listagem e detalhe renderizam os dados
   corretos e a navegação funciona.
 
@@ -230,8 +232,7 @@ Cada cenário tem uma mensagem específica em português:
 | --- | --- |
 | Usuário não encontrado (404) | Mensagem "Usuário não encontrado". |
 | Rate limit atingido (403) | Mensagem orientando aguardar. |
-| Falha de rede | Mensagem genérica com opção de tentar novamente. |
-| Sem conexão (offline) | Aviso dedicado com retry, sem spinner infinito. |
+| Falha de rede ou offline | Mensagem de falha de conexão com botão "Tentar novamente". |
 | Carregando | Indicador de loading (spinner Bootstrap). |
 | Lista de repositórios vazia | Mensagem "Nenhum repositório encontrado". |
 | Erro de renderização / rota | Tela de erro com botão de retorno, preservando o layout. |
