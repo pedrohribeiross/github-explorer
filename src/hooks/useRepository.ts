@@ -6,9 +6,7 @@ export const useRepository = (owner: string, repo: string) => {
   const trimmedOwner = owner.trim()
   const trimmedRepo = repo.trim()
   const enabled = trimmedOwner.length > 0 && trimmedRepo.length > 0
-  const fetcher = useCallback(
-    (signal: AbortSignal) => getRepository(trimmedOwner, trimmedRepo, signal),
-    [trimmedOwner, trimmedRepo],
-  )
+  const fullName = `${trimmedOwner}/${trimmedRepo}`
+  const fetcher = useCallback((signal: AbortSignal) => getRepository(fullName, signal), [fullName])
   return useFetch(fetcher, enabled)
 }

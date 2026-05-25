@@ -20,11 +20,10 @@ export const getUserRepositories = async (
 }
 
 export const getRepository = async (
-  owner: string,
-  repo: string,
+  fullName: string,
   signal?: AbortSignal,
 ): Promise<Repository> => {
-  const { data } = await githubClient.get<GitHubRepositoryResponse>(`/repos/${owner}/${repo}`, {
+  const { data } = await githubClient.get<GitHubRepositoryResponse>(`/repos/${fullName}`, {
     signal,
   })
   return toRepository(data)
