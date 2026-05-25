@@ -5,16 +5,12 @@ import type { SortOption } from '../domain'
 const sortOptionLabels: Record<SortOption, string> = {
   [SORT_OPTIONS.starsDesc]: 'Mais estrelas',
   [SORT_OPTIONS.starsAsc]: 'Menos estrelas',
-  [SORT_OPTIONS.nameAsc]: 'Nome (A–Z)',
-  [SORT_OPTIONS.nameDesc]: 'Nome (Z–A)',
   [SORT_OPTIONS.recent]: 'Mais recentes',
 }
 
 const sortOptionOrder: SortOption[] = [
   SORT_OPTIONS.starsDesc,
   SORT_OPTIONS.starsAsc,
-  SORT_OPTIONS.nameAsc,
-  SORT_OPTIONS.nameDesc,
   SORT_OPTIONS.recent,
 ]
 

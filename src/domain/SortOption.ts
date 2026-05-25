@@ -1,8 +1,6 @@
 export const SORT_OPTIONS = {
   starsDesc: 'starsDesc',
   starsAsc: 'starsAsc',
-  nameAsc: 'nameAsc',
-  nameDesc: 'nameDesc',
   recent: 'recent',
 } as const
 
